@@ -1,4 +1,6 @@
-﻿@inject SignInManager<User> SignInManager
+﻿@using Microsoft.AspNetCore.Identity
+@using TeamCollab.Data.Models
+@inject SignInManager<User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

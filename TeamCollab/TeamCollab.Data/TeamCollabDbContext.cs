@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using TeamCollab.Web.Areas.Identity.Data;
+using TeamCollab.Data.Models;
 
-namespace TeamCollab.Web.Models
+namespace TeamCollab.Data
 {
     public class TeamCollabDbContext : IdentityDbContext<User>
     {

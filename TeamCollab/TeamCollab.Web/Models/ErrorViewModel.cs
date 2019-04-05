@@ -1,5 +1,3 @@
-using System;
-
 namespace TeamCollab.Web.Models
 {
     public class ErrorViewModel

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using TeamCollab.Web.Areas.Identity.Data;
+using TeamCollab.Data.Models;
 
 namespace TeamCollab.Web.Areas.Identity.Pages.Account.Manage
 {

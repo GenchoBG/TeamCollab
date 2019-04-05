@@ -1,12 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TeamCollab.Web.Areas.Identity.Data;
-using TeamCollab.Web.Models;
+using TeamCollab.Data;
+using TeamCollab.Data.Models;
 
 [assembly: HostingStartup(typeof(TeamCollab.Web.Areas.Identity.IdentityHostingStartup))]
 namespace TeamCollab.Web.Areas.Identity
