@@ -11,6 +11,8 @@ namespace TeamCollab.Data
 {
     public class TeamCollabDbContext : IdentityDbContext<User>
     {
+        public DbSet<Project> Projects { get; set; }
+
         public TeamCollabDbContext(DbContextOptions<TeamCollabDbContext> options)
             : base(options)
         {
