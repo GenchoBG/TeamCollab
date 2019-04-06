@@ -43,6 +43,8 @@ namespace IntelliMood.Web.Infrastructure.Extensions
                             };
 
                             await userManager.CreateAsync(company, "company123");
+
+                            await userManager.AddToRoleAsync(company, "Company");
                         }
                     }).Wait();
             }

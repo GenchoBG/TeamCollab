@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,8 +37,14 @@ namespace TeamCollab.Web
             });
 
 
+            var connectionString = this.Configuration.GetConnectionString("DefaultConnection");
+
             services.AddDbContext<TeamCollabDbContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(connectionString));
+
+            services.AddDefaultIdentity<User>()
+                .AddEntityFrameworkStores<TeamCollabDbContext>(); ;
+
             services.AddIdentityCore<User>(options =>
                 {
                     options.Password.RequireDigit = false;
@@ -46,8 +53,12 @@ namespace TeamCollab.Web
                     options.Password.RequireNonAlphanumeric = false;
                 })
                 .AddRoles<IdentityRole>()
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<TeamCollabDbContext>()
-                .AddDefaultUI(UIFramework.Bootstrap4);
+                .AddSignInManager<SignInManager<User>>()
+                .AddRoleStore<RoleStore<IdentityRole, TeamCollabDbContext>>()
+                .AddUserStore<UserStore<User, IdentityRole, TeamCollabDbContext>>();
+
 
             services.AddTransient<IProjectService, ProjectService>();
 
@@ -86,3 +97,4 @@ namespace TeamCollab.Web
         }
     }
 }
+
