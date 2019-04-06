@@ -27,18 +27,30 @@ namespace TeamCollab.Services.Implementations
             };
 
             this.db.Projects.Add(project);
+            await this.db.SaveChangesAsync();
 
             return project;
         }
 
         public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var project = await this.db.Projects.FindAsync(id);
+
+            this.db.Projects.Remove(project);
+
+            await this.db.SaveChangesAsync();
         }
 
         public async Task AddWorkerAsync(int id, string workerId)
         {
-            throw new NotImplementedException();
+            var project = await this.db.Projects.FindAsync(id);
+
+            project.Workers.Add(new UserProject()
+            {
+                UserId = workerId
+            });
+
+            await this.db.SaveChangesAsync();
         }
     }
 }

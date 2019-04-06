@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TeamCollab.Services.Implementations;
+using TeamCollab.Services.Interfaces;
 
 namespace TeamCollab.Web
 {
@@ -26,7 +28,7 @@ namespace TeamCollab.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddTransient<IProjectService, ProjectService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

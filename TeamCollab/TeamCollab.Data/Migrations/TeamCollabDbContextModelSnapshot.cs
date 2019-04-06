@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamCollab.Data;
 
-namespace TeamCollab.Web.Migrations
+namespace TeamCollab.Data.Migrations
 {
     [DbContext(typeof(TeamCollabDbContext))]
     partial class TeamCollabDbContextModelSnapshot : ModelSnapshot
@@ -152,7 +152,7 @@ namespace TeamCollab.Web.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("TeamCollab.Data.Models.User", b =>

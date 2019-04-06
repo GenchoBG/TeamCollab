@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamCollab.Data;
 
-namespace TeamCollab.Web.Migrations
+namespace TeamCollab.Data.Migrations
 {
     [DbContext(typeof(TeamCollabDbContext))]
-    [Migration("20190406163948_addedProjectsAndUserRelationships")]
-    partial class addedProjectsAndUserRelationships
+    [Migration("20190406180938_IdentityAndProjects")]
+    partial class IdentityAndProjects
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -154,7 +154,7 @@ namespace TeamCollab.Web.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("TeamCollab.Data.Models.User", b =>
