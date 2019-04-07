@@ -61,7 +61,7 @@ namespace TeamCollab.Web
 
 
             services.AddTransient<IProjectService, ProjectService>();
-            services.AddTransient<IManagerService, ManagerService>();
+            services.AddTransient<ICompanyService, CompanyService>();
 
             services.AddAutoMapper();
 

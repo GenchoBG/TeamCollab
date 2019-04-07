@@ -21,28 +21,4 @@
 </div>
 
 
-<script>
-    window.onload = function () {
-        console.log("Hello?");
-
-        $.ajax({
-            type: "GET",
-            url: "/Manager/GetUsers",
-            success: function (data) {
-                console.log(data);
-                for (var user of data) {
-                    $("#managersTable")
-                        .append($(`<tr>`)
-                            .append($(`<td>`).text(user.userName))
-                            .append($(`<td>`).text(user.email))
-                            .append($('<td>')
-                                .append($(`<button class="btn btn-outline-info">`).text("Promote")
-                                    .on("click",
-                                        function () {
-                                            //TODO
-                                        }))));
-                }
-            }
-        });
-    }
-</script>
+<script src="~/js/companyScripts.js"></script>

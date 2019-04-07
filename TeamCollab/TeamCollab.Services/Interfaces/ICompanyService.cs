@@ -7,8 +7,10 @@ using TeamCollab.Data.Models;
 
 namespace TeamCollab.Services.Interfaces
 {
-    public interface IManagerService
+    public interface ICompanyService
     {
         IEnumerable<User> GetUsers();
+
+        Task PromoteAsync(string id);
     }
 }

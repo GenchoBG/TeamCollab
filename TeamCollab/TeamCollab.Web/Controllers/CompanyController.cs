@@ -13,29 +13,35 @@ using TeamCollab.Web.Models.UserViewModels;
 
 namespace TeamCollab.Web.Controllers
 {
-    [Authorize(Roles = "Manager")]
-    public class ManagerController : Controller
+    [Authorize(Roles = "Company")]
+    public class CompanyController : Controller
     {
-        private readonly IManagerService managerService;
-        private readonly UserManager<User> userManager;
+        private readonly ICompanyService companyService;
 
-        public ManagerController(IManagerService managerService, UserManager<User> userManager)
+        public CompanyController(ICompanyService companyService)
         {
-            this.managerService = managerService;
-            this.userManager = userManager;
+            this.companyService = companyService;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult GetUsers()
         {
-            var users = this.managerService
+            var users = this.companyService
                 .GetUsers()
                 .AsQueryable()
                 .ProjectTo<UserListViewModel>()
                 .ToList();
 
             return this.Json(users);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Promote(string id)
+        {
+            await this.companyService.PromoteAsync(id);
+
+            return this.Ok();
         }
     }
 }
