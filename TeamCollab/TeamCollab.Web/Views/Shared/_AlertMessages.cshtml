@@ -1,17 +1,17 @@
 ﻿@if (TempData.ContainsKey("Error"))
 {
-    <h2 class="alert alert-danger" id="erroralert">
-        <span class="glyphicon glyphicon-exclamation-sign"></span>
+    <h2 class="alert alert-danger alert-dismissible">
+        <strong>Error!</strong>
         @TempData["Error"]
-        <button class="btn" style="float: right" onclick="$('#erroralert').hide()">x</button>
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
     </h2>
 }
 
 @if (TempData.ContainsKey("Success"))
 {
-    <h2 class="alert alert-success" id="successalert">
-        <span class="glyphicon glyphicon-exclamation-sign"></span>
+    <h2 class="alert alert-success alert-dismissible">
+        <strong>Success!</strong>
         @TempData["Success"]
-        <button class="btn" style="float: right" onclick="$('#successalert').hide()">x</button>
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
     </h2>
 }

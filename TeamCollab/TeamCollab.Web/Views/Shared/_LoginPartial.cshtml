@@ -9,7 +9,11 @@
         if (this.User.IsInRole("Company"))
         {
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Manager" asp-action="Index">Assign manager</a>
+                <a class="nav-link text-dark" href="#" data-toggle="modal" data-target="#assignManagersModal">
+                    Assign managers
+                </a>
+
+                <partial name="_AssignManagersModal"/>
             </li>
         }
         else
