@@ -9,6 +9,6 @@ namespace TeamCollab.Services.Interfaces
 {
     public interface IManagerService
     {
-        IQueryable<User> GetUsers();
+        IEnumerable<User> GetUsers();
     }
 }

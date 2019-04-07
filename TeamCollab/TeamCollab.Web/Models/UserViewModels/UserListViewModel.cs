@@ -9,8 +9,10 @@ namespace TeamCollab.Web.Models.UserViewModels
 {
     public class UserListViewModel : IMapFrom<User>
     {
-        public string Name { get; set; }
-
         public string Id { get; set; }
+
+        public string UserName { get; set; }
+
+        public string Email { get; set; }
     }
 }
