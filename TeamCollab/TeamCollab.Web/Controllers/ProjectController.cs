@@ -39,7 +39,7 @@ namespace TeamCollab.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> Create(CreateViewModel project)
+        public async Task<IActionResult> Create(ProjectCreateViewModel project)
         {
             if (!this.ModelState.IsValid)
             {
