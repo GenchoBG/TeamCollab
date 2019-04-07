@@ -1,0 +1,17 @@
+﻿@if (TempData.ContainsKey("Error"))
+{
+    <h2 class="alert alert-danger" id="erroralert">
+        <span class="glyphicon glyphicon-exclamation-sign"></span>
+        @TempData["Error"]
+        <button class="btn" style="float: right" onclick="$('#erroralert').hide()">x</button>
+    </h2>
+}
+
+@if (TempData.ContainsKey("Success"))
+{
+    <h2 class="alert alert-success" id="successalert">
+        <span class="glyphicon glyphicon-exclamation-sign"></span>
+        @TempData["Success"]
+        <button class="btn" style="float: right" onclick="$('#successalert').hide()">x</button>
+    </h2>
+}

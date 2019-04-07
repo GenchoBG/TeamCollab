@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TeamCollab.Data.Models;
 using TeamCollab.Services.Interfaces;
+using TeamCollab.Web.Infrastructure.Extensions;
 using TeamCollab.Web.Models.ProjectViewModels;
 
 namespace TeamCollab.Web.Controllers
 {
+    [Authorize]
     public class ProjectController : Controller
     {
         private readonly IProjectService projectService;
@@ -28,12 +31,14 @@ namespace TeamCollab.Web.Controllers
 //        }
 
         [HttpGet]
+        [Authorize("Manager")]
         public IActionResult Create()
         {
             return this.View();
         }
 
         [HttpPost]
+        [Authorize("Manager")]
         public async Task<IActionResult> Create(CreateViewModel project)
         {
             if (!this.ModelState.IsValid)
@@ -45,7 +50,8 @@ namespace TeamCollab.Web.Controllers
 
             await this.projectService.CreateAsync(project.Heading, project.Description, user.Id);
 
-            return this.RedirectToAction("Manage");
+            this.TempData.AddSuccessMessage("You have successfully created a project");
+            return this.RedirectToAction("Index", "Home");
         }
     }
 }
