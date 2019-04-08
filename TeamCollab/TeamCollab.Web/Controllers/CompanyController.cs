@@ -13,7 +13,7 @@ using TeamCollab.Web.Models.UserViewModels;
 
 namespace TeamCollab.Web.Controllers
 {
-    [Authorize(Roles = "Company")]
+//    [Authorize(Roles = "Company")]
     public class CompanyController : Controller
     {
         private readonly ICompanyService companyService;

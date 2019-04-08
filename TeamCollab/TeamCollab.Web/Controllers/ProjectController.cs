@@ -31,7 +31,6 @@ namespace TeamCollab.Web.Controllers
 //        }
 
         [HttpGet]
-        [Authorize("Manager")]
         [Authorize(Roles = "Manager")]
         public IActionResult Create()
         {

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using TeamCollab.Services.Implementations;
+using TeamCollab.Services.Interfaces;
 
 namespace TeamCollab.Web.Infrastructure.Extensions
 {
@@ -8,6 +11,8 @@ namespace TeamCollab.Web.Infrastructure.Extensions
     {
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
+            IProjectService cSharpOptimisationsAreTrash;
+           
             var serviceTypes = AppDomain
                 .CurrentDomain
                 .GetAssemblies()
