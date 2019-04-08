@@ -5,29 +5,34 @@
         type: "GET",
         url: "/Company/GetUsers",
         success: function(data) {
-            console.log(data);
-            for (var user of data) {
+            for (var i = 0; i < data.length; i++) {
+                var user = data[i];
                 $("#managersTable")
                     .append($(`<tr id="${user.id}"></tr>`)
                         .append($(`<td>`).text(user.userName))
                         .append($(`<td>`).text(user.email))
                         .append($('<td>')
-                            .append($(`<button class="btn btn-outline-info" id="btn-${user.id}">`).text("Promote")
-                                .on("click",
-                                    function() {
-                                        $.ajax({
-                                            type: "GET",
-                                            url: `/Company/Promote/${user.id}`,
-                                            success: function() {
-                                                $(`#btn-${user.id}`).addClass("disabled");
-                                                $(`#${user.id}`).fadeOut("slow");
-                                            }
-                                        });
-                                    }))));
+                            .append($(`<button onclick="Promote('${user.id}')" class="btn btn-outline-info" id="btn-${user.id}">`).text("Promote"))));
             }
         },
         error: function(err) {
             console.log(err);
         }
     });
+
+
 };
+
+function Promote(userId) {
+    $.ajax({
+        type: "GET",
+        url: `/Company/Promote/${userId}`,
+        success: function () {
+            $(`#btn-${userId}`).addClass("disabled");
+            $(`#${userId}`).fadeOut("slow");
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
