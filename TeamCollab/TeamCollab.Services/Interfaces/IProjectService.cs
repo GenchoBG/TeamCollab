@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TeamCollab.Data.Models;
@@ -13,5 +14,7 @@ namespace TeamCollab.Services.Interfaces
         Task DeleteAsync(int id);
 
         Task AddWorkerAsync(int id, string workerId);
+
+        IQueryable<Project> GetProjects(string userId);
     }
 }

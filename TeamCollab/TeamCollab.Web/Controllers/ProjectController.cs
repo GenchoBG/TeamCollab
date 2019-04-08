@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,16 @@ namespace TeamCollab.Web.Controllers
 
             this.TempData.AddSuccessMessage("You have successfully created a project");
             return this.RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Index()
+        {
+            var projects = this.projectService
+                .GetProjects(this.userManager.GetUserId(this.User))
+                .ProjectTo<ProjectListViewModel>()
+                .ToList();
+
+            return this.View(projects);
         }
     }
 }

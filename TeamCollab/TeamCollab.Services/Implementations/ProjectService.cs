@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TeamCollab.Data;
@@ -26,6 +27,12 @@ namespace TeamCollab.Services.Implementations
                 ManagerId = userId
             };
 
+            project.Workers.Add(new UserProject()
+            {
+                IsManager = true,
+                UserId = userId
+            });
+
             this.db.Projects.Add(project);
             await this.db.SaveChangesAsync();
 
@@ -51,6 +58,14 @@ namespace TeamCollab.Services.Implementations
             });
 
             await this.db.SaveChangesAsync();
+        }
+
+        public IQueryable<Project> GetProjects(string userId)
+        {
+            return this.db.Users
+                .Where(u => u.Id == userId)
+                .SelectMany(u => u.Projects)
+                .Select(up => up.Project);
         }
     }
 }
