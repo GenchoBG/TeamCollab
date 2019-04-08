@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TeamCollab.Web.Models.ProjectViewModels
 {
-    public class CreateViewModel
+    public class ProjectCreateViewModel
     {
         [Required]
         [MinLength(6)]

@@ -61,7 +61,6 @@ namespace TeamCollab.Web
 
             
             services.RegisterServices();
-
             services.AddAutoMapper();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -88,7 +87,7 @@ namespace TeamCollab.Web
 
             app.Seed();
 
-             app.UseMvc(routes =>
+            app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
