@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TeamCollab.Data;
 using TeamCollab.Data.Models;
 
-namespace IntelliMood.Web.Infrastructure.Extensions
+namespace TeamCollab.Web.Infrastructure.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
@@ -41,7 +41,7 @@ namespace IntelliMood.Web.Infrastructure.Extensions
                                 UserName = "Company",
                                 Email = "company.email@company.com"
                             };
-
+                            
                             await userManager.CreateAsync(company, "company123");
 
                             await userManager.AddToRoleAsync(company, "Company");

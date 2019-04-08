@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using IntelliMood.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +13,7 @@ using TeamCollab.Data;
 using TeamCollab.Data.Models;
 using TeamCollab.Services.Implementations;
 using TeamCollab.Services.Interfaces;
+using TeamCollab.Web.Infrastructure.Extensions;
 
 namespace TeamCollab.Web
 {
@@ -59,8 +59,8 @@ namespace TeamCollab.Web
                 .AddRoleStore<RoleStore<IdentityRole, TeamCollabDbContext>>()
                 .AddUserStore<UserStore<User, IdentityRole, TeamCollabDbContext>>();
 
-
-            services.AddTransient<IProjectService, ProjectService>();
+            
+            services.RegisterServices();
 
             services.AddAutoMapper();
 
@@ -88,7 +88,7 @@ namespace TeamCollab.Web
 
             app.Seed();
 
-            app.UseMvc(routes =>
+             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",

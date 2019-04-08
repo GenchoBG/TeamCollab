@@ -31,14 +31,14 @@ namespace TeamCollab.Web.Controllers
 //        }
 
         [HttpGet]
-        [Authorize("Manager")]
+        [Authorize(Roles = "Manager")]
         public IActionResult Create()
         {
             return this.View();
         }
 
         [HttpPost]
-        [Authorize("Manager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create(CreateViewModel project)
         {
             if (!this.ModelState.IsValid)
