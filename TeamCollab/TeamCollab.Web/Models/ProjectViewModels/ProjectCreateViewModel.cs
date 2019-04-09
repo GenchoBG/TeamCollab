@@ -10,7 +10,7 @@ namespace TeamCollab.Web.Models.ProjectViewModels
     {
         [Required]
         [MinLength(6)]
-        [MaxLength(50)]
+        [MaxLength(25)]
         public string Heading { get; set; }
 
         [Required]
