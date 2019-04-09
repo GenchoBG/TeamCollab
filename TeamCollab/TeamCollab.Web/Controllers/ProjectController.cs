@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,11 +19,13 @@ namespace TeamCollab.Web.Controllers
     {
         private readonly IProjectService projectService;
         private readonly UserManager<User> userManager;
+        private readonly IMapper mapper;
 
-        public ProjectController(IProjectService projectService, UserManager<User> userManager)
+        public ProjectController(IProjectService projectService, UserManager<User> userManager, IMapper mapper)
         {
             this.projectService = projectService;
             this.userManager = userManager;
+            this.mapper = mapper;
         }
 
 //        [HttpGet]
@@ -63,6 +66,15 @@ namespace TeamCollab.Web.Controllers
                 .ToList();
 
             return this.View(projects);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var project = await this.projectService.GetAsync(id);
+
+            var model = this.mapper.Map<ProjectDetailsViewModel>(project);
+
+            return this.View(model);
         }
     }
 }

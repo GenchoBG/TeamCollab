@@ -16,5 +16,7 @@ namespace TeamCollab.Services.Interfaces
         Task AddWorkerAsync(int id, string workerId);
 
         IQueryable<Project> GetProjects(string userId);
+
+        Task<Project> GetAsync(int id);
     }
 }

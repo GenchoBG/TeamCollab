@@ -15,7 +15,7 @@
                 <h5 class="card-title">@project.ManagerName</h5>
                 <p class="card-text">@project.Description.Substring(0, 100)...</p>
 
-                <a class="btn btn-outline-warning" asp-action="Details" asp-controller="Project">Details</a>
+                <a class="btn btn-outline-warning" href="/Project/Details/@project.Id">Details</a>
                 @if (this.User.IsInRole("Manager"))
                 {
                     <a class="btn btn-outline-danger" asp-action="Manage" asp-controller="Project">Manage</a>

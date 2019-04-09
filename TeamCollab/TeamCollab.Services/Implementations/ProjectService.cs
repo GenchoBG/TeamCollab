@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TeamCollab.Data;
 using TeamCollab.Data.Models;
 using TeamCollab.Services.Interfaces;
@@ -66,6 +67,17 @@ namespace TeamCollab.Services.Implementations
                 .Where(u => u.Id == userId)
                 .SelectMany(u => u.Projects)
                 .Select(up => up.Project);
+        }
+
+        public async Task<Project> GetAsync(int id)
+        {
+            var project = await this.db.Projects
+                .Include(p => p.Manager)
+                .Include(p => p.Workers)
+                .ThenInclude(up => up.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return project;
         }
     }
 }
