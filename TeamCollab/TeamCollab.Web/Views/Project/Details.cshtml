@@ -7,15 +7,16 @@
 <h1 class="display-3">More about @Model.Heading</h1>
 
 <div style="width: 100%; overflow-wrap: break-word;">
-    Description:    
+    <strong>Description:</strong>    
     @Model.Description
 </div>
+<br>
 <blockquote>Created by @Model.ManagerName</blockquote>
 
 <h3 class="display-3">Team</h3>
 <ul>
     @foreach (var worker in Model.Workers)
     {
-        <li>@worker</li>
+        <li>@worker.UserName</li>
     }
 </ul>

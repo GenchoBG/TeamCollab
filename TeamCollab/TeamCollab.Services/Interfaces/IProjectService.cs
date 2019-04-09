@@ -13,6 +13,8 @@ namespace TeamCollab.Services.Interfaces
 
         Task DeleteAsync(int id);
 
+        Task UpdateAsync(int id, string description);
+
         Task AddWorkerAsync(int id, string workerId);
 
         IQueryable<Project> GetProjects(string userId);

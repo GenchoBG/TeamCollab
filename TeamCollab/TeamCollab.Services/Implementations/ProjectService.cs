@@ -49,6 +49,15 @@ namespace TeamCollab.Services.Implementations
             await this.db.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(int id, string description)
+        {
+            var project = await this.db.Projects.FindAsync(id);
+
+            project.Description = description;
+
+            await this.db.SaveChangesAsync();
+        }
+
         public async Task AddWorkerAsync(int id, string workerId)
         {
             var project = await this.db.Projects.FindAsync(id);

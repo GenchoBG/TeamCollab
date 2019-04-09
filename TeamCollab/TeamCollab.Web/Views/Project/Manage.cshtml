@@ -1,0 +1,57 @@
+﻿@model ProjectManageViewModel
+@{
+    ViewData["Title"] = "Manage";
+}
+
+<h1 class="display-2">Manage @Model.Details.Heading</h1>
+
+
+<form asp-action="Manage" asp-controller="Project" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Details.Heading"></label>
+        <input asp-for="Details.Heading" class="form-control" placeholder="Heading" readonly="readonly">
+    </div>
+    <div class="form-group">
+        <label asp-for="Details.Description"></label>
+        <textarea id="description" asp-for="Details.Description" class="form-control" placeholder="Description" rows="5"></textarea>
+    </div>
+    <div class="text-hide" id="projectId">@Model.Details.Id</div>
+</form>
+
+<hr/>
+<h3 class="display-4">Team</h3>
+<ul>
+    @foreach (var worker in Model.Details.Workers)
+    {
+        <li>@worker.UserName</li>
+    }
+</ul>
+
+<table id="managersTable" class="table table-striped table-hover" style="overflow-x:auto;">
+    <tr class="table-primary">
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>@user.Email</td>
+            <td><a class="btn btn-outline-warning" href="/Project/AddWorker?userId=@user.Id&projectId=@Model.Details.Id">Add to project</a></td>
+        </tr>
+    }
+    @if (!Model.Users.Any())
+    {
+        <tr>
+            <td>None</td>
+            <td>None</td>
+            <td>None</td>
+        </tr>
+    }
+</table>
+
+@section Scripts{ 
+    <script src="~/js/projectDescriptionUpdate.js"></script>
+}

@@ -11,28 +11,25 @@ using TeamCollab.Data.Models;
 using TeamCollab.Services.Interfaces;
 using TeamCollab.Web.Infrastructure.Extensions;
 using TeamCollab.Web.Models.ProjectViewModels;
+using TeamCollab.Web.Models.UserViewModels;
 
 namespace TeamCollab.Web.Controllers
 {
     [Authorize]
     public class ProjectController : Controller
     {
+        private readonly ICompanyService companyService;
         private readonly IProjectService projectService;
         private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
 
-        public ProjectController(IProjectService projectService, UserManager<User> userManager, IMapper mapper)
+        public ProjectController(IProjectService projectService, UserManager<User> userManager, IMapper mapper, ICompanyService companyService)
         {
             this.projectService = projectService;
             this.userManager = userManager;
             this.mapper = mapper;
+            this.companyService = companyService;
         }
-
-//        [HttpGet]
-//        public IActionResult Manage()
-//        {
-//
-//        }
 
         [HttpGet]
         [Authorize(Roles = "Manager")]
@@ -40,6 +37,7 @@ namespace TeamCollab.Web.Controllers
         {
             return this.View();
         }
+
 
         [HttpPost]
         [Authorize(Roles = "Manager")]
@@ -55,7 +53,8 @@ namespace TeamCollab.Web.Controllers
             await this.projectService.CreateAsync(project.Heading, project.Description, user.Id);
 
             this.TempData.AddSuccessMessage("You have successfully created a project");
-            return this.RedirectToAction("Index", "Home");
+
+            return this.RedirectToAction("Index", "Project");
         }
 
         public IActionResult Index()
@@ -75,6 +74,49 @@ namespace TeamCollab.Web.Controllers
             var model = this.mapper.Map<ProjectDetailsViewModel>(project);
 
             return this.View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Manage(int id)
+        {
+            var project = await this.projectService.GetAsync(id);
+
+            var details = this.mapper.Map<ProjectDetailsViewModel>(project);
+
+            var users = this.companyService
+                .GetUsers()
+                .AsQueryable()
+                .ProjectTo<UserListViewModel>()
+                .ToList();
+
+            var model = new ProjectManageViewModel()
+            {
+                Details = details,
+                Users = users.Except(details.Workers)
+            };
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateDescription(int id, string description)
+        {
+            await this.projectService.UpdateAsync(id, description);
+
+            return this.Ok();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> AddWorker(string userId, int projectId)
+        {
+            await this.projectService.AddWorkerAsync(projectId, userId);
+
+            this.TempData.AddSuccessMessage("Worker assigned to project!");
+
+            return this.RedirectToAction("Manage", new { id = projectId });
         }
     }
 }
