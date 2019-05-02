@@ -11,13 +11,13 @@ namespace TeamCollab.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MinLength(6)]
-        [MaxLength(25)]
+        [MinLength(3)]
+        [MaxLength(100)]
         public string Heading { get; set; }
 
         [Required]
-        [MinLength(100)]
-        [MaxLength(500)]
+        [MinLength(10)]
+        [MaxLength(5000)]
         public string Description { get; set; }
 
         [Required]
