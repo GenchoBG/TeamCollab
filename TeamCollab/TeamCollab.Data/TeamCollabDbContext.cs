@@ -13,6 +13,8 @@ namespace TeamCollab.Data
     {
         public DbSet<Project> Projects { get; set; }
 
+        public DbSet<Message> Messages { get; set; }
+
         public TeamCollabDbContext(DbContextOptions<TeamCollabDbContext> options)
             : base(options)
         {
@@ -46,6 +48,18 @@ namespace TeamCollab.Data
                 .HasOne(p => p.Manager)
                 .WithMany()
                 .HasForeignKey(p => p.ManagerId);
+
+            modelBuilder
+                .Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany()
+                .HasForeignKey(m => m.UserId);
+
+            modelBuilder
+                .Entity<Project>()
+                .HasMany(p => p.Messages)
+                .WithOne(m => m.Project)
+                .HasForeignKey(m => m.ProjectId);
         }
     }
 }

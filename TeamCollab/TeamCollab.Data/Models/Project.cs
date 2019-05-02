@@ -27,5 +27,7 @@ namespace TeamCollab.Data.Models
         public User Manager { get; set; }
 
         public ICollection<UserProject> Workers { get; set; } = new List<UserProject>();
+
+        public ICollection<Message> Messages { get; set; } = new List<Message>();
     }
 }
