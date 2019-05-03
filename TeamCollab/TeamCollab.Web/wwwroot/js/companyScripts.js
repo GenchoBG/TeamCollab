@@ -1,6 +1,4 @@
 ﻿window.onload = function() {
-    console.log("Hello?");
-
     $.ajax({
         type: "GET",
         url: "/Company/GetUsers",

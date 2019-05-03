@@ -24,7 +24,6 @@ namespace TeamCollab.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult GetUsers()
         {
             var users = this.companyService

@@ -100,7 +100,7 @@ namespace TeamCollab.Web.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> UpdateDescription(int id, string description)
         {
             await this.projectService.UpdateAsync(id, description);

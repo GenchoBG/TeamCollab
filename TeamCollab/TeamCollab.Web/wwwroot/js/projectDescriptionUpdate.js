@@ -3,7 +3,7 @@
         var content = $("#description").val();
         var id = $("#projectId").text();
 
-        if (content.length >= 100 && content.length <= 500) {
+        if (content.length >= 10 && content.length <= 5000) {
             $.ajax({
                 url: '/Project/UpdateDescription',
                 type: 'post',
