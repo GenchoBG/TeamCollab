@@ -39,14 +39,14 @@ namespace TeamCollab.Services.Implementations
             await this.db.SaveChangesAsync();
         }
 
-        public IQueryable<Message> GetLast(int lastLoadedMessageId)
+        public IQueryable<Message> GetLast(int projectId, int lastLoadedMessageId)
         {
-            return this.db.Messages.Where(m => m.Id > lastLoadedMessageId).Take(Count);
+            return this.db.Messages.Where(m => m.ProjectId == projectId).Where(m => m.Id > lastLoadedMessageId).Take(Count);
         }
 
-        public IQueryable<Message> GetLast()
+        public IQueryable<Message> GetLast(int projectId)
         {
-            return this.db.Messages.TakeLast(Count);
+            return this.db.Messages.Where(m => m.ProjectId == projectId).ToList().TakeLast(Count).AsQueryable();
         }
     }
 }

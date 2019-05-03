@@ -1,0 +1,15 @@
+﻿@model IEnumerable<MessageViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Chat</h1>
+
+@foreach (var message in Model)
+{
+    <div>
+        <p>@message.Content</p>
+        <small>@message.Created - @message.Sender</small>
+    </div>
+}
