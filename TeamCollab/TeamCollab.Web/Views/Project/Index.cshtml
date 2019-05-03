@@ -16,6 +16,7 @@
                 <p class="card-text">@project.Description.Substring(0, Math.Min(project.Description.Length, 100))...</p>
 
                 <a class="btn btn-outline-warning" href="/Project/Details/@project.Id">Details</a>
+                <a class="btn btn-outline-info" href="/Chat/Index/@project.Id">Chat room</a>
                 @if (this.User.IsInRole("Manager"))
                 {
                     <a class="btn btn-outline-danger" href="/Project/Manage/@project.Id">Manage</a>

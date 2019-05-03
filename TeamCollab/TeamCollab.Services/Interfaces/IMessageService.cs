@@ -11,7 +11,7 @@ namespace TeamCollab.Services.Interfaces
     {
         Task Add(string content, string senderId, int projectId);
         Task Destroy(int id);
-        IQueryable<Message> GetLast(int lastLoadedMessageId);
-        IQueryable<Message> GetLast();
+        IQueryable<Message> GetLast(int projectId, int lastLoadedMessageId);
+        IQueryable<Message> GetLast(int projectId);
     }
 }
