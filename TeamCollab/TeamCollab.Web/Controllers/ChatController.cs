@@ -6,6 +6,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamCollab.Services.Interfaces;
+using TeamCollab.Web.Models.ChatViewModels;
 using TeamCollab.Web.Models.MessageViewModels;
 
 namespace TeamCollab.Web.Controllers
@@ -25,7 +26,13 @@ namespace TeamCollab.Web.Controllers
         {
             var messages = this.messageService.GetLast(id).ProjectTo<MessageViewModel>().ToList();
 
-            return this.View(messages);
+            var model = new ChatViewModel()
+            {
+                RoomId = id,
+                Messages = messages
+            };
+
+            return this.View(model);
         }
     }
 }

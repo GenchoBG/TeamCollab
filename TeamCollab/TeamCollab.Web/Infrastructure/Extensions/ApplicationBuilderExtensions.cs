@@ -71,7 +71,11 @@ namespace TeamCollab.Web.Infrastructure.Extensions
                                 Heading = "Test",
                                 Description = "Testtesttesttest",
                                 Manager = testManager,
-                                Workers = new List<UserProject>() { new UserProject() { User = testWorker } }
+                                Workers = new List<UserProject>()
+                                {
+                                    new UserProject() { User = testWorker },
+                                    new UserProject() { User = testManager }
+                                }
                             };
 
                             await db.Projects.AddAsync(project);

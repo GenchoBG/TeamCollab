@@ -13,6 +13,7 @@ using TeamCollab.Data;
 using TeamCollab.Data.Models;
 using TeamCollab.Services.Implementations;
 using TeamCollab.Services.Interfaces;
+using TeamCollab.Web.Hubs;
 using TeamCollab.Web.Infrastructure.Extensions;
 
 namespace TeamCollab.Web
@@ -64,6 +65,8 @@ namespace TeamCollab.Web
             services.AddAutoMapper();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +89,11 @@ namespace TeamCollab.Web
             app.UseCookiePolicy();
 
             app.Seed();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/Chat");
+            });
 
             app.UseMvc(routes =>
             {
