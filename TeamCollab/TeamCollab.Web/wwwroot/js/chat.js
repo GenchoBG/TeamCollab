@@ -23,7 +23,17 @@ function DisplayCurrentTime(date) {
     var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
 
     return `${hours}:${minutes} ${ampm}`;
-};
+}
+
+$("#messageInput").on("keypress", function (event) {
+    if (event.which === 13) {
+        if (!event.shiftKey) {
+            $("#sendButton").click();
+        }
+        event.preventDefault();
+    }
+
+});
 
 connection.on("ReceiveMessage", function (user, message) {
     let msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
