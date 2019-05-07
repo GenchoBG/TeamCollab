@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -41,10 +42,40 @@ namespace TeamCollab.Web.Infrastructure.Extensions
                                 UserName = "Company",
                                 Email = "company.email@company.com"
                             };
-                            
+
                             await userManager.CreateAsync(company, "company123");
 
                             await userManager.AddToRoleAsync(company, "Company");
+                        }
+
+                        if (!await db.Projects.AnyAsync())
+                        {
+                            var testManager = new User()
+                            {
+                                UserName = "TestManager",
+                                Email = "manager@gmail.com"
+                            };
+
+                            var testWorker = new User()
+                            {
+                                UserName = "TestWorker",
+                                Email = "worker@gmail.com"
+                            };
+
+                            await userManager.CreateAsync(testManager, "test12");
+                            await userManager.AddToRoleAsync(testManager, "Manager");
+                            await userManager.CreateAsync(testWorker, "test12");
+
+                            var project = new Project()
+                            {
+                                Heading = "Test",
+                                Description = "Testtesttesttest",
+                                Manager = testManager,
+                                Workers = new List<UserProject>() { new UserProject() { User = testWorker } }
+                            };
+
+                            await db.Projects.AddAsync(project);
+                            await db.SaveChangesAsync();
                         }
                     }).Wait();
             }
