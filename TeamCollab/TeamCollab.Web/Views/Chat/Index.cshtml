@@ -6,25 +6,48 @@
 
 <h1>Chat</h1>
 
-<div id="messages">
-    @foreach (var message in Model.Messages)
-    {
-        <div>
-            <p>@message.Content</p>
-            <small>@message.Created - @message.Sender</small>
-        </div>
-    }
-</div>
-
-
 <div id="room" style="display: none">@Model.RoomId</div>
 <div id="sender" style="display: none">@User.Identity.Name</div>
 
-<input type="text" id="messageInput" />
-<input type="button" id="sendButton" value="Send Message" />
+<div class="w-100">
+    <div class="w-100 d-block">
+        <div id="messages">
+            @foreach (var message in Model.Messages)
+            {
+                if (message.Sender == User.Identity.Name)
+                {
+                    <div class="message person d-block">
+                        <p class="messageContent messageSmallContent">@message.Content</p>
+                        <div class="timestamp">@message.Created.ToShortTimeString()</div>
+                    </div>
+                }
+                else
+                {
+                    <div class="message d-block">
+                        <div><small><strong>@message.Sender</strong></small></div>
+                        <p class="messageContent messageSmallContent">@message.Content</p>
+                        <div class="timestamp">@message.Created.ToShortTimeString()</div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div id="inputArea" class="form-group">
+        <div class="input-group">
+            <textarea class="form-control noresize" type="text" id="messageInput" rows="1" placeholder="Type something..."></textarea>
 
+            <span class="input-group-btn">
+                <button id="sendButton" class="btn btn-outline-primary">Enter</button>
+            </span>
+        </div>
+    </div>
+</div>
 
-@section Scripts { 
+@section Scripts {
     <script src="~/lib/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/chat.js"></script>
+    
+    <script>
+        $("footer").hide();
+    </script>
 }
