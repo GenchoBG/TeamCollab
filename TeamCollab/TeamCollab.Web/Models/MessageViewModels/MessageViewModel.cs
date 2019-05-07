@@ -20,7 +20,7 @@ namespace TeamCollab.Web.Models.MessageViewModels
         public void ConfigureMapping(Profile profile)
         {
             profile.CreateMap<Message, MessageViewModel>()
-                .ForMember(m => m.Sender, opts => opts.MapFrom(m => m.Sender));
+                .ForMember(m => m.Sender, opts => opts.MapFrom(m => m.Sender.UserName));
         }
     }
 }

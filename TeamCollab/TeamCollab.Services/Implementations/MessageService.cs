@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TeamCollab.Data;
 using TeamCollab.Data.Models;
 using TeamCollab.Services.Interfaces;
@@ -41,12 +42,12 @@ namespace TeamCollab.Services.Implementations
 
         public IQueryable<Message> GetLast(int projectId, int lastLoadedMessageId)
         {
-            return this.db.Messages.Where(m => m.ProjectId == projectId).Where(m => m.Id > lastLoadedMessageId).Take(Count);
+            return this.db.Messages.Include(m => m.Sender).Where(m => m.ProjectId == projectId).Where(m => m.Id > lastLoadedMessageId).Take(Count);
         }
 
         public IQueryable<Message> GetLast(int projectId)
         {
-            return this.db.Messages.Where(m => m.ProjectId == projectId).ToList().TakeLast(Count).AsQueryable();
+            return this.db.Messages.Include(m => m.Sender).Where(m => m.ProjectId == projectId).ToList().TakeLast(Count).AsQueryable();
         }
     }
 }
