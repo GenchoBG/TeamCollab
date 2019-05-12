@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using TeamCollab.Data.Models;
 using TeamCollab.Web.Infrastructure.Mapper;
 

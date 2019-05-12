@@ -12,8 +12,6 @@ function scrollToBottom() {
 }
 
 function DisplayCurrentTime(date) {
-    console.log(date);
-
     var hours = date.getHours();
     var ampm = "AM";
     if (hours > 12) {
@@ -35,21 +33,23 @@ $("#messageInput").on("keypress", function (event) {
 
 });
 
-connection.on("ReceiveMessage", function (user, message) {
+function appendMessage(user, message) {
     let msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
     if (user === sender) {
-        $("#messages").append($(`<div class="message person d-block">
+        $("#messages").append($(`<div id="${message.id}" class="message person d-block">
         <p class="messageContent messageSmallContent">${msg}</p>
         <div class="timestamp">${DisplayCurrentTime(new Date(Date.now()))}</div></div>`));
     } else {
         $("#messages").append(
-            $(`<div class="message d-block">
+            $(`<div id="${message.id}" class="message d-block">
             <div><small><strong>${user}</strong></small></div>
             <p class="messageContent messageSmallContent">${msg}</p>
             <div class="timestamp">${DisplayCurrentTime(new Date(Date.now()))}</div></div>`));
     }
-});
+}
+
+connection.on("ReceiveMessage", appendMessage);
 
 connection.start().then(function () {
     connection.invoke("JoinRoom", room).then(scrollToBottom).catch(function (err) {
@@ -77,9 +77,38 @@ $("#sendButton").on("click", function (event) {
 
 
 // "infinite" scroll stuff
-$('#messages').scroll(function() {
-    if ($('#chatBox').scrollTop() === 0) {
-        console.log("Zarejdai oshteee");
+$('#messages').scroll(function () {
+    if ($('#messages').scrollTop() === 0) {
+        
         $('#loader').show();
+
+        let lastId = $("#messages div")[1].id;
+
+        $.ajax({
+            method: "GET",
+            url: `/Chat/GetLast?id=${room}&lastLoadedMessageId=${lastId}`,
+            success: function (messages) {
+                console.log(messages);
+                for (let message of messages) {
+                    let div = $("<div>");
+                    div.attr("id", message.id);
+                    div.addClass("message");
+                    div.addClass("d-block");
+                    if (message.sender === sender) {
+                        div.addClass("person");
+                    } else {
+                        div.append($(`<div><small><strong>${message.sender}</strong></small></div>`));
+                    }
+                    div.append($(`<p class="messageContent messageSmallContent">${message.content}</p>`));
+                    div.append($(`<div class="timestamp">${DisplayCurrentTime(new Date(Date.parse(message.created)))}</div>`));
+
+                    $("#messages").prepend(div);
+                }
+            }
+        }).then(function() {
+            $('#loader').hide();
+            console.log($(`#${lastId}`).offset().top);
+            $('#messages').scrollTop($(`#${lastId}`).offset().top - 100);
+        });
     }
 });

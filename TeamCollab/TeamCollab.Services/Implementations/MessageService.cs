@@ -42,7 +42,7 @@ namespace TeamCollab.Services.Implementations
 
         public IQueryable<Message> GetLast(int projectId, int lastLoadedMessageId)
         {
-            return this.db.Messages.Include(m => m.Sender).Where(m => m.ProjectId == projectId).Where(m => m.Id > lastLoadedMessageId).OrderByDescending(m => m.Id).Take(Count);
+            return this.db.Messages.Include(m => m.Sender).Where(m => m.ProjectId == projectId).Where(m => m.Id < lastLoadedMessageId).OrderByDescending(m => m.Id).Take(Count);
         }
 
         public IQueryable<Message> GetLast(int projectId)

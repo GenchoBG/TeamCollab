@@ -12,18 +12,20 @@
 <div class="w-100">
     <div class="w-100 d-block">
         <div id="messages">
+            <div id="loader" class="pong-loader" style="display: none"></div>
+
             @foreach (var message in Model.Messages)
             {
                 if (message.Sender == User.Identity.Name)
                 {
-                    <div class="message person d-block">
+                    <div id="@message.Id" class="message person d-block">
                         <p class="messageContent messageSmallContent">@message.Content</p>
                         <div class="timestamp">@message.Created.ToShortTimeString()</div>
                     </div>
                 }
                 else
                 {
-                    <div class="message d-block">
+                    <div id="@message.Id" class="message d-block">
                         <div><small><strong>@message.Sender</strong></small></div>
                         <p class="messageContent messageSmallContent">@message.Content</p>
                         <div class="timestamp">@message.Created.ToShortTimeString()</div>
