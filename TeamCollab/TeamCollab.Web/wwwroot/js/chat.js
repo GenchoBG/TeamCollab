@@ -82,7 +82,7 @@ $('#messages').scroll(function () {
         
         $('#loader').show();
 
-        let lastId = $("#messages div")[1].id;
+        let lastId = $("#messages div.message")[0].id;
 
         $.ajax({
             method: "GET",
@@ -108,7 +108,7 @@ $('#messages').scroll(function () {
         }).then(function() {
             $('#loader').hide();
             console.log($(`#${lastId}`).offset().top);
-            $('#messages').scrollTop($(`#${lastId}`).offset().top - 100);
+            $('#messages').scrollTop($(`#${lastId}`).offset().top - 200);
         });
     }
 });
