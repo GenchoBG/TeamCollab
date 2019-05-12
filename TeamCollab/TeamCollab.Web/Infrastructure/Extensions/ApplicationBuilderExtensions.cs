@@ -79,6 +79,21 @@ namespace TeamCollab.Web.Infrastructure.Extensions
                             };
 
                             await db.Projects.AddAsync(project);
+
+                            var random = new Random();
+                            var messagesCount = 120;
+                            
+                            for (int i = 0; i < messagesCount; i++)
+                            {
+                                await db.Messages.AddAsync(new Message()
+                                {
+                                    Project = project,
+                                    Sender = random.Next(0, 2) == 0 ? testManager : testWorker,
+                                    Created = DateTime.Now,
+                                    Content = i.ToString()
+                                });
+                            }
+
                             await db.SaveChangesAsync();
                         }
                     }).Wait();
