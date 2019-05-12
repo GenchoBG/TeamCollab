@@ -62,11 +62,24 @@ connection.start().then(function () {
 });
 
 $("#sendButton").on("click", function (event) {
+    event.preventDefault();
+
     let message = $("#messageInput").val();
+    if (message === "") {
+        return;
+    }
     connection.invoke("SendMessage", room, sender, message).catch(function (err) {
         return console.error(err.toString());
     });
     $("#messageInput").val("");
     scrollToBottom();
-    event.preventDefault();
+});
+
+
+// "infinite" scroll stuff
+$('#messages').scroll(function() {
+    if ($('#chatBox').scrollTop() === 0) {
+        console.log("Zarejdai oshteee");
+        $('#loader').show();
+    }
 });

@@ -82,7 +82,7 @@ namespace TeamCollab.Web.Infrastructure.Extensions
 
                             var random = new Random();
                             var messagesCount = 120;
-                            
+
                             for (int i = 0; i < messagesCount; i++)
                             {
                                 await db.Messages.AddAsync(new Message()
