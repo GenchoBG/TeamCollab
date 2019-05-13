@@ -74,8 +74,8 @@ namespace TeamCollab.Data
             modelBuilder
                 .Entity<Board>()
                 .HasOne(b => b.Project)
-                .WithOne()
-                .HasForeignKey<Board>(b => b.ProjectId);
+                .WithMany()
+                .HasForeignKey(b => b.ProjectId);
 
             modelBuilder
                 .Entity<Board>()
@@ -98,8 +98,8 @@ namespace TeamCollab.Data
             modelBuilder
                 .Entity<Card>()
                 .HasOne(c => c.LastModifiedBy)
-                .WithOne()
-                .HasForeignKey<Card>(c => c.LastModifiedById);
+                .WithMany()
+                .HasForeignKey(c => c.LastModifiedById);
         }
     }
 }

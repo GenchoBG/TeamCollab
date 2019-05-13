@@ -18,15 +18,19 @@ namespace TeamCollab.Services.Implementations
             this.db = db;
         }
 
-        public async Task AddBoardAsync(int projectId, string name)
+        public async Task<Board> AddBoardAsync(int projectId, string name)
         {
-            await this.db.Boards.AddAsync(new Board()
+            var board = new Board()
             {
                 Name = name,
                 ProjectId = projectId
-            });
+            };
+
+            await this.db.Boards.AddAsync(board);
 
             await this.db.SaveChangesAsync();
+
+            return board;
         }
 
         public async Task EditBoardAsync(int boardId, string name)

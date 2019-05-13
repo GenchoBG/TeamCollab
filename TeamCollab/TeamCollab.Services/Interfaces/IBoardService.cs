@@ -6,7 +6,7 @@ namespace TeamCollab.Services.Interfaces
 {
     public interface IBoardService
     {
-        Task AddBoardAsync(int projectId, string name);
+        Task<Board> AddBoardAsync(int projectId, string name);
         Task EditBoardAsync(int boardId, string name);
         Task DeleteBoardAsync(int boardId);
         Task AddCardToBoardAsync(int boardId, string content, string userId);
