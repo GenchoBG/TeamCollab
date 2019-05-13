@@ -9,8 +9,8 @@ namespace TeamCollab.Services.Interfaces
 {
     public interface IMessageService
     {
-        Task Add(string content, string senderId, int projectId);
-        Task Destroy(int id);
+        Task AddAsync(string content, string senderId, int projectId);
+        Task DestroyAsync(int id);
         IQueryable<Message> GetLast(int projectId, int lastLoadedMessageId);
         IQueryable<Message> GetLast(int projectId);
     }

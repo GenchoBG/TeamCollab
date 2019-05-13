@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamCollab.Data;
 
 namespace TeamCollab.Data.Migrations
 {
     [DbContext(typeof(TeamCollabDbContext))]
-    partial class TeamCollabDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190513205436_CardPrev")]
+    partial class CardPrev
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,7 +157,7 @@ namespace TeamCollab.Data.Migrations
                         .IsUnique()
                         .HasFilter("[RootCardId] IS NOT NULL");
 
-                    b.ToTable("Boards");
+                    b.ToTable("Board");
                 });
 
             modelBuilder.Entity("TeamCollab.Data.Models.Card", b =>
@@ -195,7 +197,7 @@ namespace TeamCollab.Data.Migrations
                         .IsUnique()
                         .HasFilter("[PrevCardId] IS NOT NULL");
 
-                    b.ToTable("Cards");
+                    b.ToTable("Card");
                 });
 
             modelBuilder.Entity("TeamCollab.Data.Models.Message", b =>

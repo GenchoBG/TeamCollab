@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using TeamCollab.Services.Implementations;
 using TeamCollab.Services.Interfaces;
 
 namespace TeamCollab.Web.Infrastructure.Extensions

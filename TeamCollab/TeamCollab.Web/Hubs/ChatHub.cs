@@ -25,7 +25,7 @@ namespace TeamCollab.Web.Hubs
         public async Task SendMessage(string room, string sender, string message)
         {
             var user = await this.userManager.FindByNameAsync(sender);
-            await this.messageService.Add(message, user.Id, int.Parse(room));
+            await this.messageService.AddAsync(message, user.Id, int.Parse(room));
             await this.Clients.Group(room).SendAsync("ReceiveMessage", sender, message);
         }
     }

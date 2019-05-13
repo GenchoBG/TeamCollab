@@ -20,7 +20,7 @@ namespace TeamCollab.Services.Implementations
             this.db = db;
         }
 
-        public async Task Add(string content, string senderId, int projectId)
+        public async Task AddAsync(string content, string senderId, int projectId)
         {
             await this.db.Messages.AddAsync(new Message()
             {
@@ -33,7 +33,7 @@ namespace TeamCollab.Services.Implementations
             await this.db.SaveChangesAsync();
         }
 
-        public async Task Destroy(int id)
+        public async Task DestroyAsync(int id)
         {
             this.db.Messages.Remove(await this.db.Messages.FindAsync(id));
 

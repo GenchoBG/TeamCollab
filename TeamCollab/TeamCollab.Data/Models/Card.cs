@@ -15,6 +15,14 @@ namespace TeamCollab.Data.Models
 
         public DateTime LastModified { get; set; }
 
+        public string LastModifiedById { get; set; }
+
+        public User LastModifiedBy { get; set; }
+
+        public int? PrevCardId { get; set; }
+
+        public Card Prev { get; set; }
+
         public int? NextCardId { get; set; }
 
         public Card Next { get; set; }

@@ -15,6 +15,10 @@ namespace TeamCollab.Data
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<Board> Boards { get; set; }
+
+        public DbSet<Card> Cards { get; set; }
+
         public TeamCollabDbContext(DbContextOptions<TeamCollabDbContext> options)
             : base(options)
         {
@@ -85,6 +89,17 @@ namespace TeamCollab.Data
                 .WithOne()
                 .HasForeignKey<Card>(c => c.NextCardId);
 
+            modelBuilder
+                .Entity<Card>()
+                .HasOne(c => c.Prev)
+                .WithOne()
+                .HasForeignKey<Card>(c => c.PrevCardId);
+
+            modelBuilder
+                .Entity<Card>()
+                .HasOne(c => c.LastModifiedBy)
+                .WithOne()
+                .HasForeignKey<Card>(c => c.LastModifiedById);
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamCollab.Data;
 
 namespace TeamCollab.Data.Migrations
 {
     [DbContext(typeof(TeamCollabDbContext))]
-    partial class TeamCollabDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190513204458_BoardName")]
+    partial class BoardName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,7 +157,7 @@ namespace TeamCollab.Data.Migrations
                         .IsUnique()
                         .HasFilter("[RootCardId] IS NOT NULL");
 
-                    b.ToTable("Boards");
+                    b.ToTable("Board");
                 });
 
             modelBuilder.Entity("TeamCollab.Data.Models.Card", b =>
@@ -177,8 +179,6 @@ namespace TeamCollab.Data.Migrations
 
                     b.Property<int?>("NextCardId");
 
-                    b.Property<int?>("PrevCardId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
@@ -191,11 +191,7 @@ namespace TeamCollab.Data.Migrations
                         .IsUnique()
                         .HasFilter("[NextCardId] IS NOT NULL");
 
-                    b.HasIndex("PrevCardId")
-                        .IsUnique()
-                        .HasFilter("[PrevCardId] IS NOT NULL");
-
-                    b.ToTable("Cards");
+                    b.ToTable("Card");
                 });
 
             modelBuilder.Entity("TeamCollab.Data.Models.Message", b =>
@@ -384,10 +380,6 @@ namespace TeamCollab.Data.Migrations
                     b.HasOne("TeamCollab.Data.Models.Card", "Next")
                         .WithOne()
                         .HasForeignKey("TeamCollab.Data.Models.Card", "NextCardId");
-
-                    b.HasOne("TeamCollab.Data.Models.Card", "Prev")
-                        .WithOne()
-                        .HasForeignKey("TeamCollab.Data.Models.Card", "PrevCardId");
                 });
 
             modelBuilder.Entity("TeamCollab.Data.Models.Message", b =>
