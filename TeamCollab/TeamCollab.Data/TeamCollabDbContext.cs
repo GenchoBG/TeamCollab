@@ -60,6 +60,31 @@ namespace TeamCollab.Data
                 .HasMany(p => p.Messages)
                 .WithOne(m => m.Project)
                 .HasForeignKey(m => m.ProjectId);
+
+            modelBuilder
+                .Entity<Board>()
+                .HasMany(b => b.Cards)
+                .WithOne(c => c.Board)
+                .HasForeignKey(c => c.BoardId);
+
+            modelBuilder
+                .Entity<Board>()
+                .HasOne(b => b.Project)
+                .WithOne()
+                .HasForeignKey<Board>(b => b.ProjectId);
+
+            modelBuilder
+                .Entity<Board>()
+                .HasOne(b => b.Root)
+                .WithOne()
+                .HasForeignKey<Board>(b => b.RootCardId);
+
+            modelBuilder
+                .Entity<Card>()
+                .HasOne(c => c.Next)
+                .WithOne()
+                .HasForeignKey<Card>(c => c.NextCardId);
+
         }
     }
 }
