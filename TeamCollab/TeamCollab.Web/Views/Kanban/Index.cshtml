@@ -2,131 +2,11 @@
 @{
     ViewData["Title"] = "Index";
 }
-<style type="text/css">
-
-
-    #kaban {
-        float: left;
-        position: relative;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-    }
-
-    #scroller {
-        float: left;
-        position: relative;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        overflow: auto;
-    }
-
-    #boards {
-        float: left;
-        position: relative;
-        width: auto;
-        height: auto;
-        margin-bottom: 30px;
-    }
-
-    .board {
-        float: left;
-        position: relative;
-        width: 300px;
-        height: auto;
-        margin: 8px;
-        background-color: lightgray;
-        border-radius: 3px;
-        box-shadow: 1px 1px 1px rgba(0,0,0,.2);
-    }
-
-        .board header {
-            float: left;
-            width: 100%;
-            padding: .5em;
-            background-color: lightgray;
-            text-transform: uppercase;
-            border-radius: 3px 3px 0 0;
-        }
-
-    #board1 header {
-        background-color: #BC3425;
-        color: white
-    }
-
-    #board2 header {
-        background-color: #92549E;
-        color: white
-    }
-
-    #board3 header {
-        background-color: #00B1CF;
-        color: white
-    }
-
-    .cards {
-        list-style-type: none;
-        float: left;
-        width: 100%;
-        padding: 4px 8px;
-    }
-
-    .card {
-        float: left;
-        width: 100%;
-        height: auto;
-        background-color: white;
-        padding: 10px;
-        margin: 4px 0;
-        border-radius: 3px;
-        box-shadow: 1px 1px 1px rgba(0,0,0,.2);
-        cursor: move;
-        cursor: -webkit-grab;
-        cursor: -moz-grab;
-        cursor: grab;
-    }
-
-    .cardtitle {
-        float: left;
-        width: 100%;
-    }
-
-    .cards .is-moving {
-        background-color: white;
-        color: black
-    }
-
-
-
-    .gu-mirror {
-        cursor: move;
-        cursor: -webkit-grabbing;
-        cursor: -moz-grabbing;
-        cursor: grabbing;
-        position: fixed !important;
-        margin: 0 !important;
-        z-index: 9999 !important;
-        opacity: 1;
-        -webkit-transform: rotate(5deg);
-        transform: rotate(5deg);
-    }
-
-    .gu-hide {
-        display: none !important;
-    }
-
-    .gu-transit {
-        opacity: 0.4;
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-        filter: alpha(opacity=20);
-    }
-</style>
 
 <div class="input-group mb-3">
     <input id="boardName" type="text" class="form-control" placeholder="Add board" aria-label="Recipient's username" aria-describedby="basic-addon2">
     <div class="input-group-append">
-        <button class="btn" onclick="addBoard()">Append</button>
+        <button id="boardNameBtn" class="btn" onclick="addBoard()">Append</button>
     </div>
 </div>
 
@@ -135,7 +15,12 @@
         @foreach (var board in Model)
         {
             <div class="board" id="board-@board.Id">
-                <header>@board.Name</header>
+                <div class="row">
+                    <div class="col-10">
+                        <header style="display: inline">@board.Name</header>
+                    </div>
+                    <div class="col" id="x-@board.Id" onclick="deleteBoard(@board.Id)" style="font-size: 20pt;">&times;</div>
+                </div>
                 <div class="input-group mb-3">
                     <input id="cardName-@board.Id" type="text" class="form-control" placeholder="Add card" aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
@@ -185,32 +70,31 @@
         //$(".cards").onselectstart = new Function();
         //$(".cards").onmousedown = disableselect;
 
-        drake.on('drop',
-            function(el, target, source, sibling) {
-                var listChildren = $(target).children();
+        drake.on('drop', function (el, target, source, sibling) {
+            var listChildren = $(target).children();
 
-                console.log(listChildren);
-                var indexBefore = jQuery.inArray(el, listChildren) - 1;
+            console.log(listChildren);
+            var indexBefore = jQuery.inArray(el, listChildren) - 1;
 
-                console.log("element: " + el.id.replace("card-", ""));
+            console.log("element: " + el.id.replace("card-", ""));
 
-                var prevId = indexBefore < 0 ? null : listChildren[indexBefore].id.replace("card-", "");
-                var nextId = sibling ? sibling.id.replace("card-", "") : null;
+            var prevId = indexBefore < 0 ? null : listChildren[indexBefore].id.replace("card-", "");
+            var nextId = sibling ? sibling.id.replace("card-", "") : null;
 
-                console.log("prev: " + prevId);
-                console.log("next: " + nextId);
-                console.log("boardId: " + $(target).parent().attr("id").replace("board-", ""));
+            console.log("prev: " + prevId);
+            console.log("next: " + nextId);
+            console.log("boardId: " + $(target).parent().attr("id").replace("board-", ""));
 
-                moveCard(el.id.replace("card-", ""), $(target).parent().attr("id").replace("board-", ""), prevId, nextId);
-            });
+            moveCard(el.id.replace("card-", ""), $(target).parent().attr("id").replace("board-", ""), prevId, nextId);
+        });
 
         function moveCard(cardId, boardId, prevId, nextId) {
             $.ajax({
                 method: "GET",
                 url: `/Kanban/MoveCard?cardId=${cardId}&boardId=${boardId}&prevCardId=${prevId}&nextCardId=${nextId}`,
-                success: function() {
+                success: function () {
                 },
-                error: function(err) {
+                error: function (err) {
                     console.log(err);
                 }
             });
@@ -220,10 +104,10 @@
             $.ajax({
                 method: "GET",
                 url: `/Kanban/AddBoard?projectId=${$("#projectId").text()}&name=${$("#boardName").val()}`,
-                success: function(board) {
+                success: function (board) {
                     location.reload();
                 },
-                error: function(err) {
+                error: function (err) {
                     console.log(err);
                 }
             });
@@ -233,26 +117,47 @@
             $.ajax({
                 method: "GET",
                 url: `/Kanban/AddCard?boardId=${id}&text=${$(`#cardName-${id}`).val()}`,
-                success: function(board) {
+                success: function (board) {
                     location.reload();
                 },
-                error: function(err) {
+                error: function (err) {
                     console.log(err);
                 }
             });
         }
 
         $("div.board div input").on("keypress", function (event) {
-            
+
             if (event.which === 13) {
                 if (!event.shiftKey) {
                     $(event.target).parent().find("button").click();
-                    
+
                 }
                 event.preventDefault();
             }
-
         });
+
+        $("#boardName").on("keypress", function (event) {
+            if (event.which === 13) {
+                if (!event.shiftKey) {
+                    $("#boardNameBtn").click();
+                }
+                event.preventDefault();
+            }
+        });
+
+        function deleteBoard(boardId) {
+            $.ajax({
+                method: "GET",
+                url: `/Kanban/DeleteBoard?boardId=${boardId}`,
+                success: function () {
+                    location.reload();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
 
     </script>
 }

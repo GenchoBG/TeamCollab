@@ -137,6 +137,112 @@ body {
     }
 }
 
+/* Kanban */
+
+#kaban {
+    float: left;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+#scroller {
+    float: left;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    overflow: auto;
+}
+
+#boards {
+    float: left;
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.board {
+    float: left;
+    position: relative;
+    width: 300px;
+    height: auto;
+    margin: 8px;
+    background-color: lightgray;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+}
+
+    .board > .input-group {
+        width: 90%;
+        margin: auto;
+    }
+
+.board header {
+    float: left;
+    width: 100%;
+    padding: .5em;
+    background-color: lightgray;
+    text-transform: uppercase;
+    border-radius: 3px 3px 0 0;
+}
+
+.cards {
+    list-style-type: none;
+    float: left;
+    width: 100%;
+    padding: 4px 8px;
+}
+
+.card {
+    float: left;
+    width: 100%;
+    height: auto;
+    background-color: white;
+    padding: 10px;
+    margin: 4px 0;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+    cursor: move;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: grab;
+}
+
+.cardtitle {
+    float: left;
+    width: 100%;
+}
+
+.cards .is-moving {
+    background-color: white;
+    color: black
+}
+
+.gu-mirror {
+    cursor: move;
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+    cursor: grabbing;
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 1;
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg);
+}
+
+.gu-hide {
+    display: none !important;
+}
+
+.gu-transit {
+    opacity: 0.4;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+}
 
 /*Loading*/
 
@@ -151,19 +257,19 @@ body {
     transform: translate3d(0, 0, 0);
 }
 
-.pong-loader:before {
-    content: "";
-    position: absolute;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    top: 15px;
-    width: 10px;
-    height: 10px;
-    background-color: #0d3a87;
-    border-radius: 50%;
-    animation: ballbounce 0.6s ease-out infinite;
-}
+    .pong-loader:before {
+        content: "";
+        position: absolute;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        top: 15px;
+        width: 10px;
+        height: 10px;
+        background-color: #0d3a87;
+        border-radius: 50%;
+        animation: ballbounce 0.6s ease-out infinite;
+    }
 
 @keyframes paddles {
     0% {
