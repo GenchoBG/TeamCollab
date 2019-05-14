@@ -18,6 +18,12 @@ namespace TeamCollab.Services.Implementations
             this.db = db;
         }
 
+
+        public IQueryable<Board> GetBoards(int projectId)
+        {
+            return this.db.Boards.Where(b => b.ProjectId == projectId);
+        }
+
         public async Task<Board> AddBoardAsync(int projectId, string name)
         {
             var board = new Board()

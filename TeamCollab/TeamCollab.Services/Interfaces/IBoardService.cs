@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TeamCollab.Data.Models;
 
@@ -6,6 +7,7 @@ namespace TeamCollab.Services.Interfaces
 {
     public interface IBoardService
     {
+        IQueryable<Board> GetBoards(int projectId);
         Task<Board> AddBoardAsync(int projectId, string name);
         Task EditBoardAsync(int boardId, string name);
         Task DeleteBoardAsync(int boardId);

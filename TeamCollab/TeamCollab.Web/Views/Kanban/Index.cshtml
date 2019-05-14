@@ -1,46 +1,126 @@
-﻿
+﻿@model IEnumerable<BoardViewModel>
 @{
     ViewData["Title"] = "Index";
 }
 <style type="text/css">
-		
-
-		#kaban {float:left;position:relative;width:100%;max-width:100%;height:auto;}
-		#scroller {float:left;position:relative;width:100%;max-width:100%;height:auto;overflow:auto;}
-		#boards {float:left;position:relative;width:auto;height:auto;margin-bottom:30px;}
-
-		.board {float:left;position:relative;width:300px;height:auto;margin:8px;background-color:lightgray;border-radius:3px;box-shadow:1px 1px 1px rgba(0,0,0,.2);}
-		.board header {float:left;width:100%;padding:.5em;background-color:lightgray;text-transform:uppercase;border-radius:3px 3px 0 0;}
-
-		#board1 header {background-color:#BC3425;color:white}
-		#board2 header {background-color:#92549E;color:white}
-		#board3 header {background-color:#00B1CF;color:white}
-
-		.cards {list-style-type:none;float:left;width:100%;padding:4px 8px;}
-		.card {float:left;width:100%;height:auto;background-color:white;padding:10px;margin:4px 0;border-radius:3px;box-shadow:1px 1px 1px rgba(0,0,0,.2);
-		cursor:move; cursor:-webkit-grab; cursor:-moz-grab; cursor:grab;}
-		.cardtitle {float:left;width:100%;}
-		.cards .is-moving {background-color:white;color:black}
 
 
+    #kaban {
+        float: left;
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    }
 
-		.gu-mirror {
-		  cursor:move; cursor:-webkit-grabbing; cursor:-moz-grabbing; cursor:grabbing;
-		  position: fixed !important;
-		  margin: 0 !important;
-		  z-index: 9999 !important;
-		  opacity: 1;
-		  -webkit-transform: rotate(5deg);
-		transform: rotate(5deg);
-		}
-		.gu-hide {
-		  display: none !important;
-		}
-		.gu-transit {
-		  opacity: 0.4;
-		  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-		  filter: alpha(opacity=20);
-		}
+    #scroller {
+        float: left;
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        overflow: auto;
+    }
+
+    #boards {
+        float: left;
+        position: relative;
+        width: auto;
+        height: auto;
+        margin-bottom: 30px;
+    }
+
+    .board {
+        float: left;
+        position: relative;
+        width: 300px;
+        height: auto;
+        margin: 8px;
+        background-color: lightgray;
+        border-radius: 3px;
+        box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+    }
+
+        .board header {
+            float: left;
+            width: 100%;
+            padding: .5em;
+            background-color: lightgray;
+            text-transform: uppercase;
+            border-radius: 3px 3px 0 0;
+        }
+
+    #board1 header {
+        background-color: #BC3425;
+        color: white
+    }
+
+    #board2 header {
+        background-color: #92549E;
+        color: white
+    }
+
+    #board3 header {
+        background-color: #00B1CF;
+        color: white
+    }
+
+    .cards {
+        list-style-type: none;
+        float: left;
+        width: 100%;
+        padding: 4px 8px;
+    }
+
+    .card {
+        float: left;
+        width: 100%;
+        height: auto;
+        background-color: white;
+        padding: 10px;
+        margin: 4px 0;
+        border-radius: 3px;
+        box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+        cursor: move;
+        cursor: -webkit-grab;
+        cursor: -moz-grab;
+        cursor: grab;
+    }
+
+    .cardtitle {
+        float: left;
+        width: 100%;
+    }
+
+    .cards .is-moving {
+        background-color: white;
+        color: black
+    }
+
+
+
+    .gu-mirror {
+        cursor: move;
+        cursor: -webkit-grabbing;
+        cursor: -moz-grabbing;
+        cursor: grabbing;
+        position: fixed !important;
+        margin: 0 !important;
+        z-index: 9999 !important;
+        opacity: 1;
+        -webkit-transform: rotate(5deg);
+        transform: rotate(5deg);
+    }
+
+    .gu-hide {
+        display: none !important;
+    }
+
+    .gu-transit {
+        opacity: 0.4;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+        filter: alpha(opacity=20);
+    }
 </style>
 
 <div class="input-group mb-3">
@@ -51,26 +131,21 @@
 </div>
 
 <div id="kaban">
-    <div id="scroller">
-        <div id="boards">
-
-            <div class="board" id="board1">
-                <header>On Hold</header>
-                <div class="cards" id="b1">
-                    <div class="card" id="card1"><span class="cardtitle noselect">A great card #1</span></div>
-                    <div class="card" id="card2"><span class="cardtitle noselect">A great card #2</span></div>
-                    <div class="card" id="card3"><span class="cardtitle noselect">A great card #3</span></div>
-                    <div class="card" id="card4"><span class="cardtitle noselect">A great card #4</span></div>
+    <div id="boards">
+        @foreach (var board in Model)
+        {
+            <div class="board" id="board-@board.Id">
+                <header>@board.Name</header>
+                <div class="cards">
+                    <div class="card" id="card-@board.Id"><span class="cardtitle">@board.Name</span></div>
+                    @foreach (var card in board.Cards)
+                    {
+                        <div class="card" id="card-@card.Id"><span class="cardtitle">@card.Content</span>
+                        </div>
+                    }
                 </div>
             </div>
-
-            <div class="board" id="board2">
-                <header>In Progress</header>
-                <div class="cards" id="b2">
-                    <div class="card" id="card5"><span class="cardtitle">A great card #5</span></div>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>
 
@@ -85,7 +160,11 @@
         var l2 = document.querySelector('#b2');
         var l3 = document.querySelector('#b3');
 
-        var drake = dragula([l1, l2, l3]);
+        console.log([l1, l2, l3]);
+        console.log($("div.cards").toArray());
+
+
+        var drake = dragula($("div.cards").toArray());
         // Scrollable area
         var element = document.getElementById("boards"); // Count Boards
         var numberOfBoards = element.getElementsByClassName('board').length;
@@ -101,7 +180,7 @@
         //$(".cards").onmousedown = disableselect;
 
         drake.on('drop',
-            function(el, target, source, sibling) {
+            function (el, target, source, sibling) {
                 console.log("fuck");
                 var listChildren = $(target).children();
 
@@ -125,14 +204,10 @@
             $.ajax({
                 method: "GET",
                 url: `/Kanban/AddBoard?projectId=${$("#projectId").text()}&name=${$("#boardName").val()}`,
-                success: function(board) {
-                    $("#boards").append($("<div>")
-                        .addClass("board")
-                        .attr("id", `board-${board.id}`)
-                        .append($(`<header>${board.name}</header>`))
-                        .append($(`<div class="cards"></div>`)));
+                success: function (board) {
+                    location.reload();
                 },
-                error: function(err) {
+                error: function (err) {
                     console.log(err);
                 }
             });
