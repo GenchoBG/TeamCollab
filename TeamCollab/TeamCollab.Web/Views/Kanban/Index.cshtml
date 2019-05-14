@@ -3,7 +3,7 @@
     ViewData["Title"] = "Index";
 }
 
-<link rel="stylesheet" href="~/css/kanban.css"/>
+<link rel="stylesheet" href="~/css/kanban.css" />
 
 <div class="input-group mb-3">
     <input id="boardName" type="text" class="form-control" placeholder="Add board" aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -14,6 +14,13 @@
 
 <div id="kaban">
     <div id="boards">
+
+        <div class="board" id="bin">
+            <header style="display: inline">Recycle bin</header>
+            <button id="empty" class="btn">Empty</button>
+            <div class="cards" id="recyclebin"></div>
+        </div>
+
         @foreach (var board in Model)
         {
             <div class="board" id="board-@board.Id">
@@ -73,6 +80,10 @@
         //$(".cards").onmousedown = disableselect;
 
         drake.on('drop', function (el, target, source, sibling) {
+            if ($(target).parent().attr("id") === "bin") {
+                return;
+            }
+
             var listChildren = $(target).children();
 
             console.log(listChildren);
@@ -160,6 +171,22 @@
                 }
             });
         }
+
+        $("#empty").on("click", function () {
+            for (var card of $("#recyclebin").children().toArray()) {
+                $.ajax({
+                    method: "GET",
+                    url: `/Kanban/DeleteCard?cardId=${$(card).attr("id").replace("card-", "")}`,
+                    success: function () {
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+
+            $("#recyclebin").empty();
+        });
 
     </script>
 }

@@ -76,5 +76,12 @@ namespace TeamCollab.Web.Controllers
 
             return this.Ok();
         }
+
+        public async Task<IActionResult> DeleteCard(int cardId)
+        {
+            await this.boardService.DeleteCardAsync(cardId);
+
+            return this.Ok();
+        }
     }
 }

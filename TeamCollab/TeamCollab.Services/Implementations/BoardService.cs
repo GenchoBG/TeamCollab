@@ -195,7 +195,12 @@ namespace TeamCollab.Services.Implementations
 
         public async Task DeleteCardAsync(int cardId)
         {
-            var card = await this.db.Cards.Include(c => c.Next).Include(c => c.Prev).FirstAsync(c => c.Id == cardId);
+            var card = await this.db.Cards.Include(c => c.Board).Include(c => c.Next).Include(c => c.Prev).FirstAsync(c => c.Id == cardId);
+
+            if (card.Board.RootCardId == cardId)
+            {
+                card.Board.RootCardId = card.NextCardId;
+            }
 
             this.db.Cards.Remove(card);
 
