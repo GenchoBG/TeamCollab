@@ -33,7 +33,7 @@
     box-shadow: 1px 1px 1px rgba(0,0,0,.2);
 }
 
-.board > .input-group {
+.board > .input-group, .board > #empty {
     width: 90%;
     margin: auto;
 }

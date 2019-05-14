@@ -86,15 +86,7 @@ namespace TeamCollab.Services.Implementations
                 board.Root = card;
             }
 
-            try
-            {
-                await this.db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            await this.db.SaveChangesAsync();
         }
 
         public async Task EditCardAsync(int cardId, string content, string userId)
@@ -126,15 +118,7 @@ namespace TeamCollab.Services.Implementations
                 card.Next.Prev = card.Prev;
             }
 
-            try
-            {
-                await this.db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            await this.db.SaveChangesAsync();
 
             if (nextCardId.HasValue)
             {
@@ -144,15 +128,7 @@ namespace TeamCollab.Services.Implementations
             }
             card.NextCardId = nextCardId;
 
-            try
-            {
-                await this.db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            await this.db.SaveChangesAsync();
 
             if (prevCardId.HasValue)
             {
@@ -168,29 +144,14 @@ namespace TeamCollab.Services.Implementations
                 newBoard.RootCardId = cardId;
             }
 
-            try
-            {
-                await this.db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            await this.db.SaveChangesAsync();
 
             card.PrevCardId = prevCardId;
 
             card.BoardId = boardId;
 
-            try
-            {
-                await this.db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+            await this.db.SaveChangesAsync();
         }
 
         public async Task DeleteCardAsync(int cardId)

@@ -17,6 +17,7 @@
 
                 <a class="btn btn-outline-warning" href="/Project/Details/@project.Id">Details</a>
                 <a class="btn btn-outline-info" href="/Chat/Index/@project.Id">Chat room</a>
+                <a class="btn btn-outline-success" href="/Kanban/Index/@project.Id">Workflow</a>
                 @if (this.User.IsInRole("Manager"))
                 {
                     <a class="btn btn-outline-danger" href="/Project/Manage/@project.Id">Manage</a>
