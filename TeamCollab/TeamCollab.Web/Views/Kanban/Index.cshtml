@@ -187,24 +187,33 @@
 
         drake.on('drop',
             function(el, target, source, sibling) {
-                console.log("fuck");
                 var listChildren = $(target).children();
 
                 console.log(listChildren);
                 var indexBefore = jQuery.inArray(el, listChildren) - 1;
 
-                console.log("element: " + el.id);
-                if (sibling != undefined) {
-                    console.log("sibling: " + sibling.id);
-                }
+                console.log("element: " + el.id.replace("card-", ""));
 
-                if (indexBefore < 0) {
-                    console.log(null);
-                } else {
-                    console.log("before: " + listChildren[indexBefore].id);
-                }
+                var prevId = indexBefore < 0 ? null : listChildren[indexBefore].id.replace("card-", "");
+                var nextId = sibling ? sibling.id.replace("card-", "") : null;
+
+                console.log("prev: " + prevId);
+                console.log("next: " + nextId);
+
+                moveCard(el.id.replace("card-", ""), prevId, nextId);
             });
 
+        function moveCard(cardId, prevId, nextId) {
+            $.ajax({
+                method: "GET",
+                url: `/Kanban/MoveCard?cardId=${cardId}&prevCardId=${prevId}&nextCardId=${nextId}`,
+                success: function() {
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        }
 
         function addBoard() {
             $.ajax({

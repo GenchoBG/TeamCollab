@@ -61,5 +61,13 @@ namespace TeamCollab.Web.Controllers
 
             return this.RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> MoveCard(int cardId, int? prevCardId, int? nextCardId)
+        {
+            await this.boardService.MoveCardAsync(cardId, prevCardId, nextCardId,
+                this.userManager.GetUserId(this.User));
+
+            return this.Ok();
+        }
     }
 }
