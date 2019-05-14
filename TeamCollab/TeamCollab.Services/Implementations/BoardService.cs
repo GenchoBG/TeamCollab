@@ -86,7 +86,15 @@ namespace TeamCollab.Services.Implementations
                 board.Root = card;
             }
 
-            await this.db.SaveChangesAsync();
+            try
+            {
+                await this.db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task EditCardAsync(int cardId, string content, string userId)
@@ -100,9 +108,14 @@ namespace TeamCollab.Services.Implementations
             await this.db.SaveChangesAsync();
         }
 
-        public async Task MoveCardAsync(int cardId, int? prevCardId, int? nextCardId, string userId)
+        public async Task MoveCardAsync(int cardId, int boardId, int? prevCardId, int? nextCardId, string userId)
         {
-            var card = await this.db.Cards.Include(c => c.Next).Include(c => c.Prev).FirstAsync(c => c.Id == cardId);
+            var card = await this.db.Cards.Include(c => c.Board).Include(c => c.Next).Include(c => c.Prev).FirstAsync(c => c.Id == cardId);
+
+            if (card.Board.RootCardId == card.Id)
+            {
+                card.Board.RootCardId = card.NextCardId;
+            }
 
             if (card.Prev != null)
             {
@@ -113,6 +126,16 @@ namespace TeamCollab.Services.Implementations
                 card.Next.Prev = card.Prev;
             }
 
+            try
+            {
+                await this.db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
             if (nextCardId.HasValue)
             {
                 var next = await this.db.Cards.Include(c => c.Next).Include(c => c.Prev).FirstAsync(c => c.Id == nextCardId);
@@ -121,15 +144,53 @@ namespace TeamCollab.Services.Implementations
             }
             card.NextCardId = nextCardId;
 
+            try
+            {
+                await this.db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
             if (prevCardId.HasValue)
             {
-                var prev = await this.db.Cards.Include(c => c.Next).Include(c => c.Prev).FirstAsync(c => c.Id == prevCardId);
+                var prev = await this.db.Cards.Include(c => c.Next).Include(c => c.Prev)
+                    .FirstAsync(c => c.Id == prevCardId);
 
                 prev.Next = card;
             }
+            else
+            {
+                var newBoard = await this.db.Boards.FindAsync(boardId);
+
+                newBoard.RootCardId = cardId;
+            }
+
+            try
+            {
+                await this.db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
             card.PrevCardId = prevCardId;
 
-            await this.db.SaveChangesAsync();
+            card.BoardId = boardId;
+
+            try
+            {
+                await this.db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task DeleteCardAsync(int cardId)

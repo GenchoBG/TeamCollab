@@ -139,7 +139,7 @@
                 <div class="input-group mb-3">
                     <input id="cardName-@board.Id" type="text" class="form-control" placeholder="Add card" aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
-                        <button class="btn" onclick="addCard(@board.Id)">Create</button>
+                        <button id="btn-@board.Id" class="btn" onclick="addCard(@board.Id)">Create</button>
                     </div>
                 </div>
                 <div class="cards">
@@ -199,14 +199,15 @@
 
                 console.log("prev: " + prevId);
                 console.log("next: " + nextId);
+                console.log("boardId: " + $(target).parent().attr("id").replace("board-", ""));
 
-                moveCard(el.id.replace("card-", ""), prevId, nextId);
+                moveCard(el.id.replace("card-", ""), $(target).parent().attr("id").replace("board-", ""), prevId, nextId);
             });
 
-        function moveCard(cardId, prevId, nextId) {
+        function moveCard(cardId, boardId, prevId, nextId) {
             $.ajax({
                 method: "GET",
-                url: `/Kanban/MoveCard?cardId=${cardId}&prevCardId=${prevId}&nextCardId=${nextId}`,
+                url: `/Kanban/MoveCard?cardId=${cardId}&boardId=${boardId}&prevCardId=${prevId}&nextCardId=${nextId}`,
                 success: function() {
                 },
                 error: function(err) {
@@ -240,5 +241,18 @@
                 }
             });
         }
+
+        $("div.board div input").on("keypress", function (event) {
+            
+            if (event.which === 13) {
+                if (!event.shiftKey) {
+                    $(event.target).parent().find("button").click();
+                    
+                }
+                event.preventDefault();
+            }
+
+        });
+
     </script>
 }

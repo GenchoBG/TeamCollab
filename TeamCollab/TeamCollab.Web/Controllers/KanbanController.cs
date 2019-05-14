@@ -62,9 +62,9 @@ namespace TeamCollab.Web.Controllers
             return this.RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> MoveCard(int cardId, int? prevCardId, int? nextCardId)
+        public async Task<IActionResult> MoveCard(int cardId, int boardId, int? prevCardId, int? nextCardId)
         {
-            await this.boardService.MoveCardAsync(cardId, prevCardId, nextCardId,
+            await this.boardService.MoveCardAsync(cardId, boardId, prevCardId, nextCardId,
                 this.userManager.GetUserId(this.User));
 
             return this.Ok();
