@@ -75,10 +75,11 @@ namespace TeamCollab.Services.Implementations
                 var last = await this.db.Cards.FindAsync(board.RootCardId);
                 while (last.NextCardId.HasValue)
                 {
-                    last = await this.db.Cards.FindAsync(board.RootCardId);
+                    last = await this.db.Cards.FindAsync(last.NextCardId);
                 }
 
                 last.Next = card;
+                card.Prev = last;
             }
             else
             {

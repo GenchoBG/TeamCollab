@@ -54,5 +54,12 @@ namespace TeamCollab.Web.Controllers
 
             return this.Json(board);
         }
+
+        public async Task<IActionResult> AddCard(int boardId, string text)
+        {
+            await this.boardService.AddCardToBoardAsync(boardId, text, this.userManager.GetUserId(this.User));
+
+            return this.RedirectToAction("Index");
+        }
     }
 }

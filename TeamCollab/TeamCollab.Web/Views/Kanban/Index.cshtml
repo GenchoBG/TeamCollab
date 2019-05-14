@@ -124,7 +124,7 @@
 </style>
 
 <div class="input-group mb-3">
-    <input id="boardName" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <input id="boardName" type="text" class="form-control" placeholder="Add board" aria-label="Recipient's username" aria-describedby="basic-addon2">
     <div class="input-group-append">
         <button class="btn" onclick="addBoard()">Append</button>
     </div>
@@ -136,11 +136,17 @@
         {
             <div class="board" id="board-@board.Id">
                 <header>@board.Name</header>
+                <div class="input-group mb-3">
+                    <input id="cardName-@board.Id" type="text" class="form-control" placeholder="Add card" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn" onclick="addCard(@board.Id)">Create</button>
+                    </div>
+                </div>
                 <div class="cards">
-                    <div class="card" id="card-@board.Id"><span class="cardtitle">@board.Name</span></div>
                     @foreach (var card in board.Cards)
                     {
-                        <div class="card" id="card-@card.Id"><span class="cardtitle">@card.Content</span>
+                        <div class="card" id="card-@card.Id">
+                            <span class="cardtitle">@card.Content</span>
                         </div>
                     }
                 </div>
@@ -180,7 +186,7 @@
         //$(".cards").onmousedown = disableselect;
 
         drake.on('drop',
-            function (el, target, source, sibling) {
+            function(el, target, source, sibling) {
                 console.log("fuck");
                 var listChildren = $(target).children();
 
@@ -204,10 +210,23 @@
             $.ajax({
                 method: "GET",
                 url: `/Kanban/AddBoard?projectId=${$("#projectId").text()}&name=${$("#boardName").val()}`,
-                success: function (board) {
+                success: function(board) {
                     location.reload();
                 },
-                error: function (err) {
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        }
+
+        function addCard(id) {
+            $.ajax({
+                method: "GET",
+                url: `/Kanban/AddCard?boardId=${id}&text=${$(`#cardName-${id}`).val()}`,
+                success: function(board) {
+                    location.reload();
+                },
+                error: function(err) {
                     console.log(err);
                 }
             });
