@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ using TeamCollab.Data.Models;
 using TeamCollab.Services.Implementations;
 using TeamCollab.Services.Interfaces;
 using TeamCollab.Web.Hubs;
+using TeamCollab.Web.Infrastructure.AuthenticationHandlers;
 using TeamCollab.Web.Infrastructure.Extensions;
 
 namespace TeamCollab.Web
@@ -64,6 +66,8 @@ namespace TeamCollab.Web
             services.RegisterServices();
             services.AddAutoMapper();
 
+
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSignalR();
@@ -97,6 +101,10 @@ namespace TeamCollab.Web
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "Api",
+                    template: "Api/{controller=Home}/{action=Index}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

@@ -35,6 +35,7 @@ namespace TeamCollab.Web.Controllers
             return this.View(model);
         }
 
+        
         public IActionResult GetLast(int id, int lastLoadedMessageId)
         {
             return this.Json(this.messageService.GetLast(id, lastLoadedMessageId).ProjectTo<MessageViewModel>().ToList());
