@@ -24,7 +24,7 @@
                             <span class="messageContent messageSmallContent">@message.Content</span>
                             <span id="tooltip-@message.Id" class="custom-tooltip-text">
                                 <ion-icon name="trash" onclick="deleteMessage(@message.Id)"></ion-icon>
-                                <ion-icon name="create"></ion-icon>
+                                <ion-icon name="create" onclick="editMessage(@message.Id)"></ion-icon>
                             </span>
                         </span>
                         <div class="timestamp">@message.Created.ToShortTimeString()</div>
@@ -40,7 +40,7 @@
                                 <span class="messageContent messageSmallContent">@message.Content</span>
                                 <span id="tooltip-@message.Id" class="custom-tooltip-text">
                                     <ion-icon name="trash" onclick="deleteMessage(@message.Id)"></ion-icon>
-                                    <ion-icon name="create"></ion-icon>
+                                    <ion-icon name="create" onclick="editMessage(@message.Id)"></ion-icon>
                                 </span>
                             </span>
                         }

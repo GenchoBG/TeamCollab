@@ -84,10 +84,10 @@ namespace TeamCollab.Web.Areas.Api
             return this.Ok();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(int? messageId, string content)
+        [HttpGet]
+        public async Task<IActionResult> Update(int? messageId, string message)
         {
-            if (!messageId.HasValue || string.IsNullOrWhiteSpace(content))
+            if (!messageId.HasValue || string.IsNullOrWhiteSpace(message))
             {
                 return this.BadRequest();
             }
@@ -107,7 +107,7 @@ namespace TeamCollab.Web.Areas.Api
                 return this.Unauthorized();
             }
 
-            await this.messageService.UpdateAsync(messageId.Value, content);
+            await this.messageService.UpdateAsync(messageId.Value, message);
 
             return this.Ok();
         }

@@ -25,12 +25,11 @@ function DisplayCurrentTime(date) {
 
 $("#messageInput").on("keypress", function (event) {
     if (event.which === 13) {
-        if (!event.shiftKey) {  
+        if (!event.shiftKey) {
             $("#sendButton").click();
         }
         event.preventDefault();
     }
-
 });
 
 function appendMessage(user, message, id) {
@@ -42,7 +41,7 @@ function appendMessage(user, message, id) {
             <span class="messageContent messageSmallContent">${msg}</span>
             <span id="tooltip-${id}" class="custom-tooltip-text">
                 <ion-icon name="trash" onclick="deleteMessage(${id})"></ion-icon>
-                <ion-icon name="create"></ion-icon>
+                <ion-icon name="create" onclick="editMessage(${id})"></ion-icon>
             </span>
         </span>
         <div class="timestamp">${DisplayCurrentTime(new Date(Date.now()))}</div></div>`));
@@ -68,7 +67,9 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
-$("#sendButton").on("click", function (event) {
+$("#sendButton").bind("click", sendMessage);
+
+function sendMessage(event) {
     event.preventDefault();
 
     let message = $("#messageInput").val();
@@ -80,13 +81,12 @@ $("#sendButton").on("click", function (event) {
     });
     $("#messageInput").val("");
     scrollToBottom();
-});
-
+}
 
 // "infinite" scroll stuff
 $('#messages').scroll(function () {
     if ($('#messages').scrollTop() === 0) {
-        
+
         $('#loader').show();
 
         let lastId = $("#messages div.message")[0].id;
@@ -112,7 +112,7 @@ $('#messages').scroll(function () {
                     $("#messages").prepend(div);
                 }
             }
-        }).then(function() {
+        }).then(function () {
             $('#loader').hide();
             console.log($(`#${lastId}`).offset().top);
             $('#messages').scrollTop($(`#${lastId}`).offset().top - 200);
@@ -131,7 +131,7 @@ function tooltipAlign(message) {
     $(mess).find(".custom-tooltip-text").css(margin, "+=" + bubbleWidth);
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     $(".message").each(function () {
         tooltipAlign(this.id);
     });
@@ -143,6 +143,35 @@ function deleteMessage(id) {
         url: `/Api/Messages/Delete?messageId=${id}`,
         success: function () {
             $("#" + id).remove();
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
+
+var editId;
+
+function editMessage(id) {
+    editId = id;
+    var current = $("#" + id).find(".messageContent").text();
+    $("#messageInput").val(current);
+    $("#sendButton").unbind("click", sendMessage);
+
+    $("#sendButton").bind("click", edit);
+}
+
+function edit(event) {
+    event.preventDefault();
+    $.ajax({
+        type: "GET",
+        url: `/Api/Messages/Update?messageId=${editId}&message=${$("#messageInput").val()}`,
+        success: function () {
+            $("#" + editId).find(".messageContent").text($("#messageInput").val());
+            $("#messageInput").val("");
+            $("#sendButton").unbind("click", edit);
+            $("#sendButton").bind("click", sendMessage);
+            tooltipAlign(editId);
         },
         error: function (err) {
             console.log(err);
