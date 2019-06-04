@@ -33,6 +33,16 @@ namespace TeamCollab.Services.Implementations
             await this.db.SaveChangesAsync();
         }
 
+        public async Task<bool> IsMessageFromSenderAsync(int messageId, string senderUsername)
+        {
+            return await this.db.Messages.AnyAsync(m => m.Id == messageId && m.Sender.UserName == senderUsername);
+        }
+
+        public async Task<bool> ExistsAsync(int messageId)
+        {
+            return await this.db.Messages.AnyAsync(m => m.Id == messageId);
+        }
+
         public async Task DestroyAsync(int id)
         {
             this.db.Messages.Remove(await this.db.Messages.FindAsync(id));
