@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using TeamCollab.Data.Models;
 
@@ -11,7 +8,7 @@ namespace TeamCollab.Services.Interfaces
     {
         Task AddAsync(string content, string senderId, int projectId);
         Task DestroyAsync(int id);
-        IQueryable<Message> GetLast(int projectId, int lastLoadedMessageId);
-        IQueryable<Message> GetLast(int projectId);
+        IQueryable<Message> GetLast(int projectId, int? lastLoadedMessageId, int? count = null);
+        IQueryable<Message> GetLast(int projectId, int? count = null);
     }
 }

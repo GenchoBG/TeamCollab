@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TeamCollab.Data.Models;
@@ -25,14 +23,19 @@ namespace TeamCollab.Web.Areas.Api
             this.signInManager = signInManager;
         }
 
-        public async Task<IActionResult> GetLast(int id, int lastLoadedMessageId)
+        public async Task<IActionResult> GetLast(int? id, int? lastLoadedMessageId, int? count)
         {
+            if (!id.HasValue)
+            {
+                return this.BadRequest();
+            }
+
             if (!await this.IsAuthenticated())
             {
                 return this.Unauthorized();
             }
 
-            return this.Json(this.messageService.GetLast(id, lastLoadedMessageId).ProjectTo<MessageViewModel>().ToList());
+            return this.Json(this.messageService.GetLast(id.Value, lastLoadedMessageId, count).ProjectTo<MessageViewModel>().ToList());
         }
 
         private async Task<bool> IsAuthenticated()

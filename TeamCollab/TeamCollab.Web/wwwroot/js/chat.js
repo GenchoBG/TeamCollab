@@ -25,7 +25,7 @@ function DisplayCurrentTime(date) {
 
 $("#messageInput").on("keypress", function (event) {
     if (event.which === 13) {
-        if (!event.shiftKey) {
+        if (!event.shiftKey) {  
             $("#sendButton").click();
         }
         event.preventDefault();

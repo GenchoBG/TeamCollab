@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using TeamCollab.Data.Models;
-using TeamCollab.Web.Infrastructure.Mapper;
+﻿using System.Collections.Generic;
 using TeamCollab.Web.Models.UserViewModels;
 
 namespace TeamCollab.Web.Models.ProjectViewModels

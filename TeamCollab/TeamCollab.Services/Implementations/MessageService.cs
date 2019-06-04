@@ -40,14 +40,19 @@ namespace TeamCollab.Services.Implementations
             await this.db.SaveChangesAsync();
         }
 
-        public IQueryable<Message> GetLast(int projectId, int lastLoadedMessageId)
+        public IQueryable<Message> GetLast(int projectId, int? lastLoadedMessageId, int? count = null)
         {
-            return this.db.Messages.Include(m => m.Sender).Where(m => m.ProjectId == projectId).Where(m => m.Id < lastLoadedMessageId).OrderByDescending(m => m.Id).Take(Count);
+            if (!lastLoadedMessageId.HasValue)
+            {
+                return this.GetLast(projectId, count);
+            }
+
+            return this.db.Messages.Include(m => m.Sender).Where(m => m.ProjectId == projectId).Where(m => m.Id < lastLoadedMessageId).OrderByDescending(m => m.Id).Take(count.GetValueOrDefault(Count));
         }
 
-        public IQueryable<Message> GetLast(int projectId)
+        public IQueryable<Message> GetLast(int projectId, int? count = null)
         {
-            return this.db.Messages.Include(m => m.Sender).Where(m => m.ProjectId == projectId).OrderByDescending(m => m.Id).Take(Count).OrderBy(m => m.Id);
+            return this.db.Messages.Include(m => m.Sender).Where(m => m.ProjectId == projectId).OrderByDescending(m => m.Id).Take(count.GetValueOrDefault(Count)).OrderBy(m => m.Id);
         }
     }
 }

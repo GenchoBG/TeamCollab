@@ -1,21 +1,16 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TeamCollab.Data;
 using TeamCollab.Data.Models;
-using TeamCollab.Services.Implementations;
-using TeamCollab.Services.Interfaces;
 using TeamCollab.Web.Hubs;
-using TeamCollab.Web.Infrastructure.AuthenticationHandlers;
 using TeamCollab.Web.Infrastructure.Extensions;
 
 namespace TeamCollab.Web
