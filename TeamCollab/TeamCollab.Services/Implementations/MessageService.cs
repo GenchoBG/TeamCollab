@@ -50,6 +50,15 @@ namespace TeamCollab.Services.Implementations
             await this.db.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(int id, string content)
+        {
+            var message = await this.db.Messages.FindAsync(id);
+
+            message.Content = content;
+
+            await this.db.SaveChangesAsync();
+        }
+
         public IQueryable<Message> GetLast(int projectId, int? lastLoadedMessageId, int? count = null)
         {
             if (!lastLoadedMessageId.HasValue)

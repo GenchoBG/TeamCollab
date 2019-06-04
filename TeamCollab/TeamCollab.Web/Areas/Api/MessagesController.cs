@@ -48,24 +48,57 @@ namespace TeamCollab.Web.Areas.Api
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int messageId)
+        public async Task<IActionResult> Update(int? messageId, string content)
         {
+            if (!messageId.HasValue || string.IsNullOrWhiteSpace(content))
+            {
+                return this.BadRequest();
+            }
+
             if (!await this.IsAuthenticated())
             {
                 return this.Unauthorized();
             }
 
-            if (!await this.messageService.ExistsAsync(messageId))
+            if (!await this.messageService.ExistsAsync(messageId.Value))
             {
                 return this.NotFound();
             }
 
-            if (!await this.messageService.IsMessageFromSenderAsync(messageId, this.GetCurrentUsername()) && !this.User.IsInRole("Manager"))
+            if (!await this.messageService.IsMessageFromSenderAsync(messageId.Value, this.GetCurrentUsername()) && !this.User.IsInRole("Manager"))
             {
                 return this.Unauthorized();
             }
 
-            await this.messageService.DestroyAsync(messageId);
+            await this.messageService.UpdateAsync(messageId.Value, content);
+
+            return this.Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? messageId)
+        {
+            if (!messageId.HasValue)
+            {
+                return this.BadRequest();
+            }
+
+            if (!await this.IsAuthenticated())
+            {
+                return this.Unauthorized();
+            }
+
+            if (!await this.messageService.ExistsAsync(messageId.Value))
+            {
+                return this.NotFound();
+            }
+
+            if (!await this.messageService.IsMessageFromSenderAsync(messageId.Value, this.GetCurrentUsername()) && !this.User.IsInRole("Manager"))
+            {
+                return this.Unauthorized();
+            }
+
+            await this.messageService.DestroyAsync(messageId.Value);
 
             return this.Ok();
         }
