@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TeamCollab.Data;
@@ -52,6 +50,13 @@ namespace TeamCollab.Services.Implementations
         public Task<bool> ExistsAsync(int id)
         {
             return this.db.Projects.AnyAsync(p => p.Id == id);
+        }
+
+        public async Task<bool> IsWorkerInProjectAsync(int id, string workerName)
+        {
+            var project = await this.db.Projects.Include(p => p.Workers).ThenInclude(up => up.User).FirstOrDefaultAsync(p => p.Id == id);
+
+            return project.Workers.Any(up => up.User.UserName.Equals(workerName, StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task UpdateAsync(int id, string description)

@@ -9,6 +9,7 @@ namespace TeamCollab.Services.Interfaces
         Task<Project> CreateAsync(string heading, string description, string userId);
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
+        Task<bool> IsWorkerInProjectAsync(int id, string workerName);
         Task UpdateAsync(int id, string description);
         Task AddWorkerAsync(int id, string workerId);
         IQueryable<Project> GetProjects(string userId);

@@ -17,13 +17,15 @@ namespace TeamCollab.Web.Areas.Api
     {
         private readonly IMessageService messageService;
         private readonly SignInManager<User> signInManager;
+        private readonly UserManager<User> userManager;
         private readonly IProjectService projectService;
 
-        public MessagesController(IMessageService messageService, SignInManager<User> signInManager, IProjectService projectService)
+        public MessagesController(IMessageService messageService, SignInManager<User> signInManager, IProjectService projectService, UserManager<User> userManager)
         {
             this.messageService = messageService;
             this.signInManager = signInManager;
             this.projectService = projectService;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -39,12 +41,46 @@ namespace TeamCollab.Web.Areas.Api
                 return this.NotFound();
             }
 
+            if (!await this.projectService.IsWorkerInProjectAsync(id.Value, this.GetCurrentUsername()))
+            {
+                return this.Unauthorized();
+            }
+
             if (!await this.IsAuthenticated())
             {
                 return this.Unauthorized();
             }
 
             return this.Json(this.messageService.GetLast(id.Value, lastLoadedMessageId, count).ProjectTo<MessageViewModel>().ToList());
+        }
+
+        public async Task<IActionResult> Create(int? roomId, string content)
+        {
+            if (!roomId.HasValue || string.IsNullOrWhiteSpace(content))
+            {
+                return this.BadRequest();
+            }
+
+            if (!await this.IsAuthenticated())
+            {
+                return this.Unauthorized();
+            }
+
+            if (!await this.projectService.ExistsAsync(roomId.Value))
+            {
+                return this.NotFound();
+            }
+
+            if (!await this.projectService.IsWorkerInProjectAsync(roomId.Value, this.GetCurrentUsername()))
+            {
+                return this.Unauthorized();
+            }
+
+            var user = await this.userManager.FindByNameAsync(this.GetCurrentUsername());
+
+            await this.messageService.AddAsync(content, user.Id, roomId.Value);
+
+            return this.Ok();
         }
 
         [HttpGet]
