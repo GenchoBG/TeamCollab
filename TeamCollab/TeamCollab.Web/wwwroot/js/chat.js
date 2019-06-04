@@ -41,7 +41,7 @@ function appendMessage(user, message, id) {
         <span class="custom-tooltip">
             <span class="messageContent messageSmallContent">${msg}</span>
             <span id="tooltip-${id}" class="custom-tooltip-text">
-                <ion-icon name="trash"></ion-icon>
+                <ion-icon name="trash" onclick="deleteMessage(${id})"></ion-icon>
                 <ion-icon name="create"></ion-icon>
             </span>
         </span>
@@ -50,13 +50,7 @@ function appendMessage(user, message, id) {
         $("#messages").append(
             $(`<div id="${id}" class="message d-block">
             <div><small><strong>${user}</strong></small></div>
-            <span class="custom-tooltip">
-                <span class="messageContent messageSmallContent">${msg}</span>
-                <span id="tooltip-${id}" class="custom-tooltip-text">
-                    <ion-icon name="trash"></ion-icon>
-                    <ion-icon name="create"></ion-icon>
-                </span>
-            </span>
+            <span class="messageContent messageSmallContent">${msg}</span>
             <div class="timestamp">${DisplayCurrentTime(new Date(Date.now()))}</div></div>`));
     }
     tooltipAlign(id);
@@ -142,3 +136,16 @@ $(document).ready(function() {
         tooltipAlign(this.id);
     });
 });
+
+function deleteMessage(id) {
+    $.ajax({
+        type: "DELETE",
+        url: `/Api/Messages/Delete?messageId=${id}`,
+        success: function () {
+            $("#" + id).remove();
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}

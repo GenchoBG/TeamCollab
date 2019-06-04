@@ -54,6 +54,7 @@ namespace TeamCollab.Web.Areas.Api
             return this.Json(this.messageService.GetLast(id.Value, lastLoadedMessageId, count).ProjectTo<MessageViewModel>().ToList());
         }
 
+        [HttpPost]
         public async Task<IActionResult> Create(int? roomId, string content)
         {
             if (!roomId.HasValue || string.IsNullOrWhiteSpace(content))
@@ -83,7 +84,7 @@ namespace TeamCollab.Web.Areas.Api
             return this.Ok();
         }
 
-        [HttpGet]
+        [HttpPut]
         public async Task<IActionResult> Update(int? messageId, string content)
         {
             if (!messageId.HasValue || string.IsNullOrWhiteSpace(content))
@@ -111,7 +112,7 @@ namespace TeamCollab.Web.Areas.Api
             return this.Ok();
         }
 
-        [HttpGet]
+        [HttpDelete]
         public async Task<IActionResult> Delete(int? messageId)
         {
             if (!messageId.HasValue)

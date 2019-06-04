@@ -4,26 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    .custom-tooltip .custom-tooltiptext {
-        visibility: hidden;
-        width: 120px;
-        background-color: #e5e5e5;
-        color: #0d3a87;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px 0;
-        /* Position the tooltip */
-        top: -5px;
-        right: 105%;
-        position: absolute;
-        z-index: 1;
-    }
-
-    .custom-tooltip:hover .custom-tooltiptext {
-        visibility: visible;
-    }
-</style>
 
 <h1>Chat</h1>
 
@@ -43,7 +23,7 @@
                         <span class="custom-tooltip">
                             <span class="messageContent messageSmallContent">@message.Content</span>
                             <span id="tooltip-@message.Id" class="custom-tooltip-text">
-                                <ion-icon name="trash"></ion-icon>
+                                <ion-icon name="trash" onclick="deleteMessage(@message.Id)"></ion-icon>
                                 <ion-icon name="create"></ion-icon>
                             </span>
                         </span>
@@ -54,13 +34,20 @@
                 {
                     <div id="@message.Id" class="message d-block sender">
                         <div><small><strong>@message.Sender</strong></small></div>
-                        <span class="custom-tooltip">
-                            <span class="messageContent messageSmallContent">@message.Content</span>
-                            <span id="tooltip-@message.Id" class="custom-tooltip-text">
-                                <ion-icon name="trash"></ion-icon>
-                                <ion-icon name="create"></ion-icon>
+                        @if (this.User.IsInRole("Manager"))
+                        {
+                            <span class="custom-tooltip">
+                                <span class="messageContent messageSmallContent">@message.Content</span>
+                                <span id="tooltip-@message.Id" class="custom-tooltip-text">
+                                    <ion-icon name="trash" onclick="deleteMessage(@message.Id)"></ion-icon>
+                                    <ion-icon name="create"></ion-icon>
+                                </span>
                             </span>
-                        </span>
+                        }
+                        else
+                        {
+                            <span class="messageContent messageSmallContent">@message.Content</span>
+                        }
                         <div class="timestamp">@message.Created.ToShortTimeString()</div>
                     </div>
                 }
