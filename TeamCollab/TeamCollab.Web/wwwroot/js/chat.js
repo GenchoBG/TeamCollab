@@ -128,7 +128,7 @@ function tooltipAlign(message) {
     if (chatBubble.parent().parent().hasClass("person")) {
         margin = "margin-right";
     }
-    $(mess).find(".custom-tooltip-text").css(margin, "+=" + bubbleWidth);
+    $(mess).find(".custom-tooltip-text").css(margin, bubbleWidth);
 }
 
 $(document).ready(function () {
