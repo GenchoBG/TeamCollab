@@ -33,20 +33,33 @@ $("#messageInput").on("keypress", function (event) {
 
 });
 
-function appendMessage(user, message) {
+function appendMessage(user, message, id) {
     let msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
     if (user === sender) {
-        $("#messages").append($(`<div id="${message.id}" class="message person d-block">
-        <p class="messageContent messageSmallContent">${msg}</p>
+        $("#messages").append($(`<div id="${id}" class="message person d-block">
+        <span class="custom-tooltip">
+            <span class="messageContent messageSmallContent">${msg}</span>
+            <span id="tooltip-${id}" class="custom-tooltip-text">
+                <ion-icon name="trash"></ion-icon>
+                <ion-icon name="create"></ion-icon>
+            </span>
+        </span>
         <div class="timestamp">${DisplayCurrentTime(new Date(Date.now()))}</div></div>`));
     } else {
         $("#messages").append(
-            $(`<div id="${message.id}" class="message d-block">
+            $(`<div id="${id}" class="message d-block">
             <div><small><strong>${user}</strong></small></div>
-            <p class="messageContent messageSmallContent">${msg}</p>
+            <span class="custom-tooltip">
+                <span class="messageContent messageSmallContent">${msg}</span>
+                <span id="tooltip-${id}" class="custom-tooltip-text">
+                    <ion-icon name="trash"></ion-icon>
+                    <ion-icon name="create"></ion-icon>
+                </span>
+            </span>
             <div class="timestamp">${DisplayCurrentTime(new Date(Date.now()))}</div></div>`));
     }
+    tooltipAlign(id);
 }
 
 connection.on("ReceiveMessage", appendMessage);
@@ -111,4 +124,21 @@ $('#messages').scroll(function () {
             $('#messages').scrollTop($(`#${lastId}`).offset().top - 200);
         });
     }
+});
+
+function tooltipAlign(message) {
+    var mess = "#" + message;
+    var chatBubble = $(mess).find(".messageContent");
+    var bubbleWidth = chatBubble.css("width");
+    var margin = "margin-left";
+    if (chatBubble.parent().parent().hasClass("person")) {
+        margin = "margin-right";
+    }
+    $(mess).find(".custom-tooltip-text").css(margin, "+=" + bubbleWidth);
+}
+
+$(document).ready(function() {
+    $(".message").each(function () {
+        tooltipAlign(this.id);
+    });
 });

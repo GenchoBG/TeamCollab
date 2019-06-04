@@ -20,17 +20,21 @@ namespace TeamCollab.Services.Implementations
             this.db = db;
         }
 
-        public async Task AddAsync(string content, string senderId, int projectId)
+        public async Task<Message> AddAsync(string content, string senderId, int projectId)
         {
-            await this.db.Messages.AddAsync(new Message()
+            var message = new Message()
             {
                 Content = content,
                 Created = DateTime.Now,
                 UserId = senderId,
                 ProjectId = projectId
-            });
+            };
+
+            await this.db.Messages.AddAsync(message);
 
             await this.db.SaveChangesAsync();
+
+            return message;
         }
 
         public async Task DestroyAsync(int id)

@@ -71,12 +71,13 @@ body {
 
 .message {
     padding: auto 0;
-    display: block;
+    /* display: block; */
     float: left;
     clear: both;
     width: 100%;
     margin-bottom: 1%;
     text-align: left;
+    position: relative;
 }
 
 .messageContent {
@@ -137,6 +138,46 @@ body {
     }
 }
 
+/* Delete and edit tooltip on chat bubbles */
+
+.custom-tooltip .custom-tooltip-text {
+    font-size: 1em;
+    line-height: 1.5em;
+    visibility: hidden;
+    max-width: 300px;
+    background-color: #e5e5e5;
+    color: #0d3a87;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: .3s;
+    transform: translate3d(0px, 20px, 0px);
+}
+
+.person > .custom-tooltip .custom-tooltip-text {
+    right: 0;
+    bottom: 25%;
+}
+
+.sender > .custom-tooltip .custom-tooltip-text {
+    left: 0;
+    bottom: 17%;
+}
+
+.custom-tooltip:hover .custom-tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translate3d(0px, 0px, 0px);
+}
+
+ion-icon {
+    width: 20px;
+    height: 20px;
+}
+
 /*Loading*/
 
 .pong-loader {
@@ -150,19 +191,19 @@ body {
     transform: translate3d(0, 0, 0);
 }
 
-    .pong-loader:before {
-        content: "";
-        position: absolute;
-        margin: 0 auto;
-        left: 0;
-        right: 0;
-        top: 15px;
-        width: 10px;
-        height: 10px;
-        background-color: #0d3a87;
-        border-radius: 50%;
-        animation: ballbounce 0.6s ease-out infinite;
-    }
+.pong-loader:before {
+    content: "";
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 15px;
+    width: 10px;
+    height: 10px;
+    background-color: #0d3a87;
+    border-radius: 50%;
+    animation: ballbounce 0.6s ease-out infinite;
+}
 
 @keyframes paddles {
     0% {
