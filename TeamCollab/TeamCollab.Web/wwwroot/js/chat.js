@@ -57,13 +57,10 @@ function appendMessage(user, message, id) {
 
 connection.on("ReceiveMessage", appendMessage);
 connection.on("UpdateMessage", function (messageId, message) {
-    console.log(messageId);
-    console.log(message);
     $("#" + messageId).find(".messageContent").text(message);
 });
 connection.on("DeleteMessage", function (messageId) {
     $("#" + messageId).remove();
-    console.log(messageId);
 });
 
 connection.start().then(function () {
@@ -147,16 +144,10 @@ $(document).ready(function () {
 });
 
 function deleteMessage(id) {
-    $.ajax({
-        type: "DELETE",
-        url: `/Api/Messages/Delete?messageId=${id}`,
-        success: function () {
-            $("#" + id).remove();
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    });
+    connection.invoke("DeleteMessage", room, id)
+        .catch(function (err) {
+            return console.error(err.toString());
+        });
 }
 
 var editId;
@@ -180,21 +171,4 @@ function edit(event) {
         .catch(function (err) {
             return console.error(err.toString());
         });
-
-
-
-    //    $.ajax({
-    //        type: "PUT",
-    //        url: `/Api/Messages/Update?messageId=${editId}&message=${$("#messageInput").val()}`,
-    //        success: function () {
-    //            $("#" + editId).find(".messageContent").text($("#messageInput").val());
-    //            $("#messageInput").val("");
-    //            $("#sendButton").unbind("click", edit);
-    //            $("#sendButton").bind("click", sendMessage);
-    //            tooltipAlign(editId);
-    //        },
-    //        error: function (err) {
-    //            console.log(err);
-    //        }
-    //    });
 }
