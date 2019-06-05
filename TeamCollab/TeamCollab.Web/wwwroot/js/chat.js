@@ -164,7 +164,7 @@ function editMessage(id) {
 function edit(event) {
     event.preventDefault();
     $.ajax({
-        type: "GET",
+        type: "PUT",
         url: `/Api/Messages/Update?messageId=${editId}&message=${$("#messageInput").val()}`,
         success: function () {
             $("#" + editId).find(".messageContent").text($("#messageInput").val());

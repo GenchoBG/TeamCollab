@@ -55,9 +55,9 @@ namespace TeamCollab.Web.Areas.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(int? roomId, string content)
+        public async Task<IActionResult> Create(int? roomId, string message)
         {
-            if (!roomId.HasValue || string.IsNullOrWhiteSpace(content))
+            if (!roomId.HasValue || string.IsNullOrWhiteSpace(message))
             {
                 return this.BadRequest();
             }
@@ -79,12 +79,12 @@ namespace TeamCollab.Web.Areas.Api
 
             var user = await this.userManager.FindByNameAsync(this.GetCurrentUsername());
 
-            await this.messageService.AddAsync(content, user.Id, roomId.Value);
+            await this.messageService.AddAsync(message, user.Id, roomId.Value);
 
             return this.Ok();
         }
 
-        [HttpGet]
+        [HttpPut]
         public async Task<IActionResult> Update(int? messageId, string message)
         {
             if (!messageId.HasValue || string.IsNullOrWhiteSpace(message))
