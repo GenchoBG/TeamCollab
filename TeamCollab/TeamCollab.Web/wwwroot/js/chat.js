@@ -56,6 +56,15 @@ function appendMessage(user, message, id) {
 }
 
 connection.on("ReceiveMessage", appendMessage);
+connection.on("UpdateMessage", function (messageId, message) {
+    console.log(messageId);
+    console.log(message);
+    $("#" + messageId).find(".messageContent").text(message);
+});
+connection.on("DeleteMessage", function (messageId) {
+    $("#" + messageId).remove();
+    console.log(messageId);
+});
 
 connection.start().then(function () {
     connection.invoke("JoinRoom", room).then(scrollToBottom).catch(function (err) {
@@ -163,18 +172,29 @@ function editMessage(id) {
 
 function edit(event) {
     event.preventDefault();
-    $.ajax({
-        type: "PUT",
-        url: `/Api/Messages/Update?messageId=${editId}&message=${$("#messageInput").val()}`,
-        success: function () {
-            $("#" + editId).find(".messageContent").text($("#messageInput").val());
+
+    connection.invoke("UpdateMessage", room, editId, $("#messageInput").val())
+        .then(function () {
             $("#messageInput").val("");
-            $("#sendButton").unbind("click", edit);
-            $("#sendButton").bind("click", sendMessage);
-            tooltipAlign(editId);
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    });
+        })
+        .catch(function (err) {
+            return console.error(err.toString());
+        });
+
+
+
+    //    $.ajax({
+    //        type: "PUT",
+    //        url: `/Api/Messages/Update?messageId=${editId}&message=${$("#messageInput").val()}`,
+    //        success: function () {
+    //            $("#" + editId).find(".messageContent").text($("#messageInput").val());
+    //            $("#messageInput").val("");
+    //            $("#sendButton").unbind("click", edit);
+    //            $("#sendButton").bind("click", sendMessage);
+    //            tooltipAlign(editId);
+    //        },
+    //        error: function (err) {
+    //            console.log(err);
+    //        }
+    //    });
 }

@@ -28,5 +28,17 @@ namespace TeamCollab.Web.Hubs
             var msg = await this.messageService.AddAsync(message, user.Id, int.Parse(room));
             await this.Clients.Group(room).SendAsync("ReceiveMessage", sender, message, msg.Id);
         }
+
+        public async Task DeleteMessage(string room, int messageId)
+        {
+            await this.messageService.DestroyAsync(messageId);
+            await this.Clients.Group(room).SendAsync("DeleteMessage", messageId);
+        }
+
+        public async Task UpdateMessage(string room, int messageId, string message)
+        {
+            await this.messageService.UpdateAsync(messageId, message);
+            await this.Clients.Group(room).SendAsync("UpdateMessage", messageId, message);
+        }
     }
 }
