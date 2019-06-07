@@ -147,7 +147,8 @@ namespace TeamCollab.Services.Implementations
             await this.db.SaveChangesAsync();
 
             card.PrevCardId = prevCardId;
-
+            card.LastModifiedById = userId;
+            card.LastModified = DateTime.Now;
             card.BoardId = boardId;
 
 
@@ -163,7 +164,21 @@ namespace TeamCollab.Services.Implementations
                 card.Board.RootCardId = card.NextCardId;
             }
 
-            this.db.Cards.Remove(card);
+            var prev = card.PrevCardId;
+
+            if (card.PrevCardId.HasValue)
+            {
+                card.Prev.NextCardId = card.NextCardId;
+            }
+
+            if (card.NextCardId.HasValue)
+            {
+                card.Next.PrevCardId = prev;
+            }
+
+            await this.db.SaveChangesAsync();
+
+            var res = this.db.Cards.Remove(card);
 
             await this.db.SaveChangesAsync();
         }
