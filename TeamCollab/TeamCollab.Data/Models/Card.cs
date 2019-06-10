@@ -27,9 +27,12 @@ namespace TeamCollab.Data.Models
 
         public Card Next { get; set; }
 
-        public int BoardId { get; set; }
+        public int? BoardId { get; set; }
 
-        [Required]
         public Board Board { get; set; }
+
+        public bool Archived { get; set; }
+
+        public DateTime? ArchivedDate { get; set; }
     }
 }

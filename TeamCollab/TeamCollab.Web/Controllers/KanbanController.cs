@@ -15,18 +15,25 @@ namespace TeamCollab.Web.Controllers
     [Authorize]
     public class KanbanController : Controller
     {
-        private UserManager<User> userManager;
+        private readonly UserManager<User> userManager;
         private readonly IBoardService boardService;
+        private readonly IProjectService projectService;
 
-        public KanbanController(UserManager<User> userManager, IBoardService boardService)
+        public KanbanController(UserManager<User> userManager, IBoardService boardService, IProjectService projectService)
         {
             this.userManager = userManager;
             this.boardService = boardService;
+            this.projectService = projectService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(int id)
         {
+            if (!await this.projectService.IsWorkerInProjectAsync(id, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             this.ViewData["projectId"] = id;
 
             var boards = await this.boardService.GetBoards(id).ToListAsync();
@@ -55,11 +62,11 @@ namespace TeamCollab.Web.Controllers
             return this.Json(board);
         }
 
-        public async Task<IActionResult> AddCard(int boardId, string text)
+        public async Task<IActionResult> AddCard(int projectId, int boardId, string text)
         {
             await this.boardService.AddCardToBoardAsync(boardId, text, this.userManager.GetUserId(this.User));
 
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Index", new { id = projectId });
         }
 
         public async Task<IActionResult> MoveCard(int cardId, int boardId, int? prevCardId, int? nextCardId)
@@ -80,6 +87,13 @@ namespace TeamCollab.Web.Controllers
         public async Task<IActionResult> DeleteCard(int cardId)
         {
             await this.boardService.DeleteCardAsync(cardId);
+
+            return this.Ok();
+        }
+
+        public async Task<IActionResult> ArchiveCard(int cardId)
+        {
+            await this.boardService.ArchiveCardAsync(cardId);
 
             return this.Ok();
         }

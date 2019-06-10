@@ -50,7 +50,14 @@ namespace TeamCollab.Services.Implementations
 
         public async Task DeleteBoardAsync(int boardId)
         {
-            var board = await this.db.Boards.FindAsync(boardId);
+            var board = await this.db.Boards.Include(b => b.Cards).FirstOrDefaultAsync(b => b.Id == boardId);
+
+            foreach (var card in board.Cards)
+            {
+                card.Board = null;
+            }
+
+            await this.db.SaveChangesAsync();
 
             this.db.Boards.Remove(board);
 
@@ -183,11 +190,38 @@ namespace TeamCollab.Services.Implementations
             await this.db.SaveChangesAsync();
         }
 
+        public async Task ArchiveCardAsync(int cardId)
+        {
+            var card = await this.db.Cards.Include(c => c.Board).Include(c => c.Next).Include(c => c.Prev).FirstAsync(c => c.Id == cardId);
+
+            if (card.Board.RootCardId == cardId)
+            {
+                card.Board.RootCardId = card.NextCardId;
+            }
+
+            var prev = card.PrevCardId;
+
+            if (card.PrevCardId.HasValue)
+            {
+                card.Prev.NextCardId = card.NextCardId;
+            }
+
+            if (card.NextCardId.HasValue)
+            {
+                card.Next.PrevCardId = prev;
+            }
+
+            card.Archived = true;
+            card.ArchivedDate = DateTime.Now;
+
+            this.db.SaveChanges();
+        }
+
         public async Task<IEnumerable<Card>> GetCardsAsync(int boardId)
         {
             var board = await this.db.Boards.Include(b => b.Cards).FirstAsync(b => b.Id == boardId);
 
-            var cards = board.Cards.ToDictionary(c => c.Id, c => c);
+            var cards = board.Cards.Where(c => !c.Archived).ToDictionary(c => c.Id, c => c);
 
             var result = new List<Card>();
 

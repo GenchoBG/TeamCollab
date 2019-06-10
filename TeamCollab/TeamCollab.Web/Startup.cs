@@ -97,8 +97,8 @@ namespace TeamCollab.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "Api",
-                    template: "Api/{controller=Home}/{action=Index}/{id?}");
+                    name: "area",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
                     name: "default",

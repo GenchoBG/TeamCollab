@@ -12,6 +12,7 @@ using TeamCollab.Web.Models.MessageViewModels;
 
 namespace TeamCollab.Web.Areas.Api
 {
+    [Area("Api")]
     public class MessagesController : Controller
     {
         private readonly IMessageService messageService;
