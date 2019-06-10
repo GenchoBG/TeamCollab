@@ -10,6 +10,7 @@ using TeamCollab.Data.Enums;
 using TeamCollab.Data.Models;
 using TeamCollab.Services.Interfaces;
 using TeamCollab.Web.Models.ArchiveViewModels;
+using TeamCollab.Web.Models.HistoryViewModels;
 using TeamCollab.Web.Models.KanbanViewModels;
 
 namespace TeamCollab.Web.Controllers
@@ -123,6 +124,13 @@ namespace TeamCollab.Web.Controllers
             var model = archived.ProjectTo<ArchivedListViewModel>().ToList();
 
             return this.View(model);
+        }
+
+        public IActionResult History(int id)
+        {
+            var logs = this.logService.GetHistory(id).ProjectTo<HistoryViewModel>().ToList();
+
+            return this.View(logs);
         }
     }
 }

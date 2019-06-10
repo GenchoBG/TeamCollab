@@ -1,0 +1,20 @@
+﻿@model IEnumerable<HistoryViewModel>
+@{
+    ViewData["Title"] = "History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="display-3">History</h1>
+
+<div class="masonry">
+    @foreach (var card in Model.OrderByDescending(c => c.Id))
+    {
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="mr-auto">@card.Type</strong>
+                <small class="text-muted">just now</small>
+            </div>
+            <div class="toast-body">@card.Content</div>
+        </div>
+    }
+</div>
