@@ -217,6 +217,11 @@ namespace TeamCollab.Services.Implementations
             this.db.SaveChanges();
         }
 
+        public async Task<Card> GetCardAsync(int cardId)
+        {
+            return await this.db.Cards.Include(c => c.Board).Include(c => c.Next).Include(c => c.Prev).FirstOrDefaultAsync(c => c.Id == cardId);
+        }
+
         public async Task<IEnumerable<Card>> GetCardsAsync(int boardId)
         {
             var board = await this.db.Boards.Include(b => b.Cards).FirstAsync(b => b.Id == boardId);

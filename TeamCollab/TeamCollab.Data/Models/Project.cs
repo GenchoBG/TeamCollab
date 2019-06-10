@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace TeamCollab.Data.Models
 {
@@ -26,8 +24,10 @@ namespace TeamCollab.Data.Models
         [Required]
         public User Manager { get; set; }
 
-        public ICollection<UserProject> Workers { get; set; } = new List<UserProject>();
+        public ICollection<UserProject> Workers { get; set; } = new HashSet<UserProject>();
 
-        public ICollection<Message> Messages { get; set; } = new List<Message>();
+        public ICollection<Message> Messages { get; set; } = new HashSet<Message>();
+
+        public ICollection<EventLog> History { get; set; } = new HashSet<EventLog>();
     }
 }
