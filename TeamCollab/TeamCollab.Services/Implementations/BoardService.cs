@@ -234,5 +234,10 @@ namespace TeamCollab.Services.Implementations
 
             return result;
         }
+
+        public IQueryable<Card> GetArchived(int projectId)
+        {
+            return this.db.Cards.Where(c => c.Board.ProjectId == projectId).Where(c => c.Archived);
+        }
     }
 }

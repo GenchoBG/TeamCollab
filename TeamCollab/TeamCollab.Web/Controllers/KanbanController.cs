@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TeamCollab.Data.Models;
 using TeamCollab.Services.Interfaces;
+using TeamCollab.Web.Models.ArchiveViewModels;
 using TeamCollab.Web.Models.KanbanViewModels;
 
 namespace TeamCollab.Web.Controllers
@@ -96,6 +97,15 @@ namespace TeamCollab.Web.Controllers
             await this.boardService.ArchiveCardAsync(cardId);
 
             return this.Ok();
+        }
+
+        public IActionResult Archived(int id)
+        {
+            var archived = this.boardService.GetArchived(id);
+
+            var model = archived.ProjectTo<ArchivedListViewModel>().ToList();
+
+            return this.View(model);
         }
     }
 }

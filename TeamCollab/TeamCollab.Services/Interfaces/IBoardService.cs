@@ -17,5 +17,6 @@ namespace TeamCollab.Services.Interfaces
         Task DeleteCardAsync(int cardId);
         Task ArchiveCardAsync(int cardId);
         Task<IEnumerable<Card>> GetCardsAsync(int boardId);
+        IQueryable<Card> GetArchived(int projectId);
     }
 }

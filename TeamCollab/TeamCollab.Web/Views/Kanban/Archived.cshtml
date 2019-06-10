@@ -1,0 +1,12 @@
+﻿@model IEnumerable<ArchivedListViewModel>
+@{
+    ViewData["Title"] = "Archived";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Archived</h1>
+
+@foreach (var card in Model)
+{
+    <p>@card.Content</p>
+}
