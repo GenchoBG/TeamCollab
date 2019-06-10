@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TeamCollab.Data.Enums;
 using TeamCollab.Data.Models;
 using TeamCollab.Services.Interfaces;
 using TeamCollab.Web.Models.KanbanViewModels;
@@ -18,12 +19,14 @@ namespace TeamCollab.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly IBoardService boardService;
         private readonly IProjectService projectService;
+        private readonly ILogService logService;
 
-        public KanbanController(UserManager<User> userManager, IBoardService boardService, IProjectService projectService)
+        public KanbanController(UserManager<User> userManager, IBoardService boardService, IProjectService projectService, ILogService logService)
         {
             this.userManager = userManager;
             this.boardService = boardService;
             this.projectService = projectService;
+            this.logService = logService;
         }
 
         [HttpGet]
@@ -66,6 +69,8 @@ namespace TeamCollab.Web.Controllers
         {
             await this.boardService.AddCardToBoardAsync(boardId, text, this.userManager.GetUserId(this.User));
 
+            await this.logService.CreateAsync(this.userManager.GetUserId(this.User), projectId, $"{this.User.Identity.Name} created \"{text}\"", EventType.Success);
+
             return this.RedirectToAction("Index", new { id = projectId });
         }
 
@@ -73,6 +78,10 @@ namespace TeamCollab.Web.Controllers
         {
             await this.boardService.MoveCardAsync(cardId, boardId, prevCardId, nextCardId,
                 this.userManager.GetUserId(this.User));
+
+            var card = await this.boardService.GetCardAsync(cardId);
+
+            await this.logService.CreateAsync(this.userManager.GetUserId(this.User), card.Board.ProjectId, $"{this.User.Identity.Name} moved \"{card.Content}\" to \"{card.Board.Name}\"", EventType.Success);
 
             return this.Ok();
         }
@@ -88,12 +97,20 @@ namespace TeamCollab.Web.Controllers
         {
             await this.boardService.DeleteCardAsync(cardId);
 
+            var card = await this.boardService.GetCardAsync(cardId);
+
+            await this.logService.CreateAsync(this.userManager.GetUserId(this.User), card.Board.ProjectId, $"{this.User.Identity.Name} deleted \"{card.Content}\"", EventType.Danger);
+
             return this.Ok();
         }
 
         public async Task<IActionResult> ArchiveCard(int cardId)
         {
             await this.boardService.ArchiveCardAsync(cardId);
+
+            var card = await this.boardService.GetCardAsync(cardId);
+
+            await this.logService.CreateAsync(this.userManager.GetUserId(this.User), card.Board.ProjectId, $"{this.User.Identity.Name} archived \"{card.Content}\"", EventType.Warning);
 
             return this.Ok();
         }

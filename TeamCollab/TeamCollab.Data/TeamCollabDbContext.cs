@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TeamCollab.Data.Models;
 
@@ -19,6 +14,8 @@ namespace TeamCollab.Data
 
         public DbSet<Card> Cards { get; set; }
 
+        public DbSet<EventLog> Logs { get; set; }
+
         public TeamCollabDbContext(DbContextOptions<TeamCollabDbContext> options)
             : base(options)
         {
@@ -27,9 +24,6 @@ namespace TeamCollab.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(modelBuilder);
 
             modelBuilder
                 .Entity<User>()
@@ -100,6 +94,18 @@ namespace TeamCollab.Data
                 .HasOne(c => c.LastModifiedBy)
                 .WithMany()
                 .HasForeignKey(c => c.LastModifiedById);
+
+            modelBuilder
+                .Entity<EventLog>()
+                .HasOne(l => l.User)
+                .WithMany()
+                .HasForeignKey(l => l.UserId);
+
+            modelBuilder
+                .Entity<EventLog>()
+                .HasOne(l => l.Project)
+                .WithMany(p => p.History)
+                .HasForeignKey(l => l.ProjectId);
         }
     }
 }
