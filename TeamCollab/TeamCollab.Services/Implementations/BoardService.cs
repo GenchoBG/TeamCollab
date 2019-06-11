@@ -21,7 +21,7 @@ namespace TeamCollab.Services.Implementations
 
         public IQueryable<Board> GetBoards(int projectId)
         {
-            return this.db.Boards.Where(b => b.ProjectId == projectId);
+            return this.db.Boards.Where(b => b.ProjectId == projectId && !b.Archived);
         }
 
         public async Task<Board> AddBoardAsync(int projectId, string name)
