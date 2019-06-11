@@ -106,6 +106,18 @@ namespace TeamCollab.Data
                 .HasOne(l => l.Project)
                 .WithMany(p => p.History)
                 .HasForeignKey(l => l.ProjectId);
+
+            modelBuilder
+                .Entity<Comment>()
+                .HasOne(m => m.Sender)
+                .WithMany()
+                .HasForeignKey(m => m.SenderId);
+
+            modelBuilder
+                .Entity<Comment>()
+                .HasOne(c => c.Card)
+                .WithMany(c => c.Comments)
+                .HasForeignKey(c => c.CardId);
         }
     }
 }

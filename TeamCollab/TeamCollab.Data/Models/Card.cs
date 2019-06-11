@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TeamCollab.Data.Models
@@ -34,5 +35,7 @@ namespace TeamCollab.Data.Models
         public bool Archived { get; set; }
 
         public DateTime? ArchivedDate { get; set; }
+
+        public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
     }
 }
