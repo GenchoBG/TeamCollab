@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,13 +23,15 @@ namespace TeamCollab.Web.Controllers
         private readonly IBoardService boardService;
         private readonly IProjectService projectService;
         private readonly ILogService logService;
+        private readonly IMapper mapper;
 
-        public KanbanController(UserManager<User> userManager, IBoardService boardService, IProjectService projectService, ILogService logService)
+        public KanbanController(UserManager<User> userManager, IBoardService boardService, IProjectService projectService, ILogService logService, IMapper mapper)
         {
             this.userManager = userManager;
             this.boardService = boardService;
             this.projectService = projectService;
             this.logService = logService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -138,6 +141,24 @@ namespace TeamCollab.Web.Controllers
             var logs = this.logService.GetHistory(id).ProjectTo<HistoryViewModel>().ToList();
 
             return this.View(logs);
+        }
+
+        public async Task<IActionResult> CardDetails(int id)
+        {
+            var card = await this.boardService.GetCardAsync(id);
+
+            var model = this.mapper.Map<CardDetailsViewModel>(card);
+
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> AddComment(int cardId, string commentContent)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+
+            await this.boardService.AddCommentAsync(cardId, userId, commentContent);
+
+            return this.Ok();
         }
     }
 }

@@ -1,0 +1,42 @@
+﻿@model CardDetailsViewModel
+@{
+    ViewData["Title"] = "CardDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Card Details @if (Model.Archived)
+{<strong>[Archived]</strong>}</h1>
+<div>Board: @Model.BoardName</div>
+<div>Created: @Model.Created.ToString()</div>
+<div>Last Modified: @Model.LastModified.ToString() by @Model.LastModifiedBy</div>
+
+<textarea id="comment-content"></textarea>
+<button onClick="addComment(@Model.Id)">Comment</button>
+
+<ul class="list-group">
+    @foreach (var comment in @Model.Comments)
+    {
+        <li class="list-group-item">
+            <div>By: @comment.Sender (@Html.FormatTime(new TimeSpan(DateTime.Now.Ticks - comment.Posted.Ticks)))</div>
+            <div>@comment.Content</div>
+        </li>
+    }
+</ul>
+
+
+@section Scripts{
+    <script>
+        function addComment(id) {
+            $.ajax({
+                method: "GET",
+                url: `/Kanban/AddComment?cardId=${id}&commentContent=${$("#comment-content").val()}`,
+                success: function () {
+                    location.reload();
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        }
+    </script>
+}

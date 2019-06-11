@@ -10,12 +10,20 @@
 <div class="masonry">
     @foreach (var card in Model.OrderByDescending(c => c.ArchivedDate))
     {
-    <div class="card masonry-brick" id="card-@card.Id">
-        <div class="card-header">Board: <strong>@card.BoardName</strong></div>
-        <div class="card-body">
-            <p class="card-text">@card.Content</p>
-            <small class="mb-2 text-muted">Archived: @card.ArchivedDate</small>
+        <div class="card masonry-brick" id="card-@card.Id">
+            <div class="card-header">
+                Board: <strong>@card.BoardName</strong>
+                <a href="/Kanban/CardDetails/@card.Id" style="float: right" class="details"><ion-icon name="add"></ion-icon></a>
+            </div>
+            <div class="card-body">
+                <p class="card-text">@card.Content</p>
+                <small class="mb-2 text-muted">Archived: @card.ArchivedDate</small>
+            </div>
         </div>
-    </div>
     }
 </div>
+
+@section Scripts
+{
+    <script src="~/js/kanban.js"></script>
+}
