@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,15 +13,23 @@ namespace TeamCollab.Web.Controllers
     public class ChatController : Controller
     {
         private readonly IMessageService messageService;
+        private readonly IProjectService projectService;
 
-        public ChatController(IMessageService messageService)
+        public ChatController(IMessageService messageService, IProjectService projectService)
+
         {
             this.messageService = messageService;
+            this.projectService = projectService;
         }
 
         [HttpGet]
-        public IActionResult Index(int id)
+        public async Task<IActionResult> Index(int id)
         {
+            if (!await this.projectService.IsWorkerInProjectAsync(id, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             var messages = this.messageService.GetLast(id).ProjectTo<MessageViewModel>().ToList();
 
             var model = new ChatViewModel()
@@ -33,8 +42,13 @@ namespace TeamCollab.Web.Controllers
         }
 
         
-        public IActionResult GetLast(int id, int lastLoadedMessageId)
+        public async Task<IActionResult> GetLast(int id, int lastLoadedMessageId)
         {
+            if (!await this.projectService.IsWorkerInProjectAsync(id, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             return this.Json(this.messageService.GetLast(id, lastLoadedMessageId: lastLoadedMessageId).ProjectTo<MessageViewModel>().ToList());
         }
     }

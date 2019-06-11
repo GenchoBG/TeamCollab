@@ -69,6 +69,11 @@ namespace TeamCollab.Web.Controllers
         {
             var project = await this.projectService.GetAsync(id);
 
+            if (!await this.projectService.IsWorkerInProjectAsync(id, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             var model = this.mapper.Map<ProjectDetailsViewModel>(project);
 
             return this.View(model);
@@ -79,6 +84,11 @@ namespace TeamCollab.Web.Controllers
         public async Task<IActionResult> Manage(int id)
         {
             var project = await this.projectService.GetAsync(id);
+
+            if (!await this.projectService.IsWorkerInProjectAsync(id, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
 
             var details = this.mapper.Map<ProjectDetailsViewModel>(project);
 
@@ -101,6 +111,11 @@ namespace TeamCollab.Web.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> UpdateDescription(int id, string description)
         {
+            if (!await this.projectService.IsWorkerInProjectAsync(id, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             await this.projectService.UpdateAsync(id, description);
 
             return this.Ok();
@@ -110,6 +125,11 @@ namespace TeamCollab.Web.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> AddWorker(string userId, int projectId)
         {
+            if (!await this.projectService.IsWorkerInProjectAsync(projectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             await this.projectService.AddWorkerAsync(projectId, userId);
 
             this.TempData.AddSuccessMessage("Worker assigned to project!");

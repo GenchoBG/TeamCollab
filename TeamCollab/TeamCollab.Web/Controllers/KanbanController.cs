@@ -65,6 +65,11 @@ namespace TeamCollab.Web.Controllers
 
         public async Task<IActionResult> AddBoard(string name, int projectId)
         {
+            if (!await this.projectService.IsWorkerInProjectAsync(projectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             var board = await this.boardService.AddBoardAsync(projectId, name);
 
             return this.Json(board);
@@ -72,6 +77,11 @@ namespace TeamCollab.Web.Controllers
 
         public async Task<IActionResult> AddCard(int projectId, int boardId, string text)
         {
+            if (!await this.projectService.IsWorkerInProjectAsync(projectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             await this.boardService.AddCardToBoardAsync(boardId, text, this.userManager.GetUserId(this.User));
 
             await this.logService.CreateAsync(this.userManager.GetUserId(this.User), projectId, $"{this.User.Identity.Name} created \"{text}\"", EventType.Success);
@@ -81,10 +91,18 @@ namespace TeamCollab.Web.Controllers
 
         public async Task<IActionResult> MoveCard(int cardId, int boardId, int? prevCardId, int? nextCardId)
         {
+            var card = await this.boardService.GetCardAsync(cardId);
+            var projectId = card.Board.ProjectId;
+
+            if (!await this.projectService.IsWorkerInProjectAsync(projectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             await this.boardService.MoveCardAsync(cardId, boardId, prevCardId, nextCardId,
                 this.userManager.GetUserId(this.User));
 
-            var card = await this.boardService.GetCardAsync(cardId);
+            card = await this.boardService.GetCardAsync(cardId);
 
             await this.logService.CreateAsync(this.userManager.GetUserId(this.User), card.Board.ProjectId, $"{this.User.Identity.Name} moved \"{card.Content}\" to \"{card.Board.Name}\"", EventType.Success);
 
@@ -93,6 +111,13 @@ namespace TeamCollab.Web.Controllers
 
         public async Task<IActionResult> ArchiveBoard(int boardId)
         {
+            var board = await this.boardService.GetBoard(boardId);
+
+            if (!await this.projectService.IsWorkerInProjectAsync(board.ProjectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             await this.boardService.ArchiveBoardAsync(boardId);
 
             return this.Ok();
@@ -100,6 +125,13 @@ namespace TeamCollab.Web.Controllers
 
         public async Task<IActionResult> DeleteBoard(int boardId)
         {
+            var board = await this.boardService.GetBoard(boardId);
+
+            if (!await this.projectService.IsWorkerInProjectAsync(board.ProjectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             await this.boardService.DeleteBoardAsync(boardId);
 
             return this.Ok();
@@ -107,9 +139,15 @@ namespace TeamCollab.Web.Controllers
 
         public async Task<IActionResult> DeleteCard(int cardId)
         {
-            await this.boardService.DeleteCardAsync(cardId);
-
             var card = await this.boardService.GetCardAsync(cardId);
+
+            if (!await this.projectService.IsWorkerInProjectAsync(card.Board.ProjectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
+
+            await this.boardService.DeleteCardAsync(cardId);
 
             await this.logService.CreateAsync(this.userManager.GetUserId(this.User), card.Board.ProjectId, $"{this.User.Identity.Name} deleted \"{card.Content}\"", EventType.Danger);
 
@@ -118,17 +156,27 @@ namespace TeamCollab.Web.Controllers
 
         public async Task<IActionResult> ArchiveCard(int cardId)
         {
-            await this.boardService.ArchiveCardAsync(cardId);
-
             var card = await this.boardService.GetCardAsync(cardId);
+
+            if (!await this.projectService.IsWorkerInProjectAsync(card.Board.ProjectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
+            await this.boardService.ArchiveCardAsync(cardId);
 
             await this.logService.CreateAsync(this.userManager.GetUserId(this.User), card.Board.ProjectId, $"{this.User.Identity.Name} archived \"{card.Content}\"", EventType.Warning);
 
             return this.Ok();
         }
 
-        public IActionResult Archived(int id)
+        public async Task<IActionResult> Archived(int id)
         {
+            if (!await this.projectService.IsWorkerInProjectAsync(id, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             var archived = this.boardService.GetArchived(id);
 
             var model = archived.ProjectTo<ArchivedListViewModel>().ToList();
@@ -136,8 +184,13 @@ namespace TeamCollab.Web.Controllers
             return this.View(model);
         }
 
-        public IActionResult History(int id)
+        public async Task<IActionResult> History(int id)
         {
+            if (!await this.projectService.IsWorkerInProjectAsync(id, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             var logs = this.logService.GetHistory(id).ProjectTo<HistoryViewModel>().ToList();
 
             return this.View(logs);
@@ -147,6 +200,11 @@ namespace TeamCollab.Web.Controllers
         {
             var card = await this.boardService.GetCardAsync(id);
 
+            if (!await this.projectService.IsWorkerInProjectAsync(card.Board.ProjectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             var model = this.mapper.Map<CardDetailsViewModel>(card);
 
             return this.View(model);
@@ -154,6 +212,13 @@ namespace TeamCollab.Web.Controllers
 
         public async Task<IActionResult> AddComment(int cardId, string commentContent)
         {
+            var card = await this.boardService.GetCardAsync(cardId);
+
+            if (!await this.projectService.IsWorkerInProjectAsync(card.Board.ProjectId, this.User.Identity.Name))
+            {
+                return this.Unauthorized();
+            }
+
             var userId = this.userManager.GetUserId(this.User);
 
             await this.boardService.AddCommentAsync(cardId, userId, commentContent);

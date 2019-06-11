@@ -283,5 +283,10 @@ namespace TeamCollab.Services.Implementations
         {
             return this.db.Cards.Where(c => c.Board.ProjectId == projectId).Where(c => c.Archived);
         }
+
+        public async Task<Board> GetBoard(int boardId)
+        {
+            return await this.db.Boards.FindAsync(boardId);
+        }
     }
 }

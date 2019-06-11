@@ -21,5 +21,6 @@ namespace TeamCollab.Services.Interfaces
         Task AddCommentAsync(int cardId, string userId, string content);
         Task<IEnumerable<Card>> GetCardsAsync(int boardId);
         IQueryable<Card> GetArchived(int projectId);
+        Task<Board> GetBoard(int boardId);
     }
 }
