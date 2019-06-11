@@ -64,10 +64,13 @@ function addBoard() {
         method: "GET",
         url: `/Kanban/AddBoard?projectId=${$("#projectId").text()}&name=${$("#boardName").val()}`,
         success: function (board) {
+            console.log(board);
+            console.log('reload that shi...');
             location.reload();
         },
         error: function (err) {
             console.log(err);
+            location.reload();
         }
     });
 }
@@ -81,6 +84,7 @@ function addCard(id) {
         },
         error: function (err) {
             console.log(err);
+            location.reload();
         }
     });
 }
@@ -116,43 +120,45 @@ function archiveBoard(boardId) {
         },
         error: function (err) {
             console.log(err);
+            location.reload();
         }
     });
 }
 
-$("#empty").on("click",
-    function () {
-        let cards = $("#recyclebin").children().toArray();
+function archiveCards() {
+    let cards = $("#recyclebin").children().toArray();
 
-        if (cards.length == 0) {
-            return;
-        }
+    if (cards.length == 0) {
+        return;
+    }
 
-        console.log(cards);
+    console.log(cards);
 
-        let index = 0;
+    let index = 0;
 
-        function recursiveForLoop() {
-            $.ajax({
-                method: "GET",
-                url: `/Kanban/ArchiveCard?cardId=${$(cards[index]).attr("id").replace("card-", "")}`,
-                success: function () {
-                    console.log(cards[index] + " archived!");
-                    index++;
-                    if (index < cards.length) {
-                        recursiveForLoop();
-                    }
-                },
-                error: function (err) {
-                    console.log(err);
+    function recursiveForLoop() {
+        $.ajax({
+            method: "GET",
+            url: `/Kanban/ArchiveCard?cardId=${$(cards[index]).attr("id").replace("card-", "")}`,
+            success: function () {
+                console.log(cards[index] + " archived!");
+                index++;
+                if (index < cards.length) {
+                    recursiveForLoop();
                 }
-            });
-        }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
 
-        recursiveForLoop();
+    recursiveForLoop();
 
-        $("#recyclebin").empty();
-    });
+    $("#recyclebin").empty();
+}
+
+$("#empty").on("click", archiveCards);
 
 var height = $("ion-icon").css("height");
 $(".details").css("height", height);

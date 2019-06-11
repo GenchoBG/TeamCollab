@@ -118,6 +118,11 @@ namespace TeamCollab.Web.Controllers
                 return this.Unauthorized();
             }
 
+            foreach (var card in board.Cards)
+            {
+                await this.logService.CreateAsync(this.userManager.GetUserId(this.User), card.Board.ProjectId, $"{this.User.Identity.Name} archived \"{card.Content}\"", EventType.Warning);
+            }
+
             await this.boardService.ArchiveBoardAsync(boardId);
 
             return this.Ok();

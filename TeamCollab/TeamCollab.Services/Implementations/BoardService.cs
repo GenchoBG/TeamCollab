@@ -286,7 +286,7 @@ namespace TeamCollab.Services.Implementations
 
         public async Task<Board> GetBoard(int boardId)
         {
-            return await this.db.Boards.FindAsync(boardId);
+            return await this.db.Boards.Include(b => b.Cards).FirstOrDefaultAsync(b => b.Id == boardId);
         }
     }
 }
