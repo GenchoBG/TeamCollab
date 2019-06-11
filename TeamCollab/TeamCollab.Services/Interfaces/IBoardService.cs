@@ -18,6 +18,7 @@ namespace TeamCollab.Services.Interfaces
         Task ArchiveCardAsync(int cardId);
         Task ArchiveBoardAsync(int boardId);
         Task<Card> GetCardAsync(int cardId);
+        Task AddCommentAsync(int cardId, string userId, string content);
         Task<IEnumerable<Card>> GetCardsAsync(int boardId);
         IQueryable<Card> GetArchived(int projectId);
     }

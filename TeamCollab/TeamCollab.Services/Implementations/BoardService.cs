@@ -234,7 +234,30 @@ namespace TeamCollab.Services.Implementations
 
         public async Task<Card> GetCardAsync(int cardId)
         {
-            return await this.db.Cards.Include(c => c.Board).Include(c => c.Next).Include(c => c.Prev).FirstOrDefaultAsync(c => c.Id == cardId);
+            return await this.db.Cards
+                                .Include(c => c.Board)
+                                .Include(c => c.Next)
+                                .Include(c => c.Prev)
+                                .Include(c => c.Comments)
+                                .ThenInclude(c => c.Sender)
+                                .FirstOrDefaultAsync(c => c.Id == cardId);
+        }
+
+        public async Task AddCommentAsync(int cardId, string userId, string content)
+        {
+            var comment = new Comment()
+            {
+                CardId = cardId,
+                SenderId = userId,
+                Content = content,
+                Posted = DateTime.Now
+            };
+
+            var card = await this.db.Cards.Include(c => c.Comments).FirstAsync(c => c.Id == cardId);
+
+            card.Comments.Add(comment);
+
+            await this.db.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Card>> GetCardsAsync(int boardId)

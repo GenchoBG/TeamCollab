@@ -3,25 +3,24 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TeamCollab.Data.Models
 {
-    public class Message
+    public class Comment
     {
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public string Content { get; set; }
 
-        public DateTime Created { get; set; }
+        public DateTime Posted { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string SenderId { get; set; }
 
         [Required]
         public User Sender { get; set; }
 
-        public int ProjectId { get; set; }
+        public int CardId { get; set; }
 
         [Required]
-        public Project Project { get; set; }
+        public Card Card { get; set; }
     }
 }
