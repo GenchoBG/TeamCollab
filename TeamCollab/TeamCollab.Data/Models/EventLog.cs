@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using TeamCollab.Data.Enums;
 
 namespace TeamCollab.Data.Models
@@ -12,6 +13,8 @@ namespace TeamCollab.Data.Models
         public string Content { get; set; }
 
         public EventType Type { get; set; }
+
+        public DateTime Happened { get; set; }
 
         [Required]
         public string UserId { get; set; }

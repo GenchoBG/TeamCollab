@@ -86,6 +86,13 @@ namespace TeamCollab.Web.Controllers
             return this.Ok();
         }
 
+        public async Task<IActionResult> ArchiveBoard(int boardId)
+        {
+            await this.boardService.ArchiveBoardAsync(boardId);
+
+            return this.Ok();
+        }
+
         public async Task<IActionResult> DeleteBoard(int boardId)
         {
             await this.boardService.DeleteBoardAsync(boardId);

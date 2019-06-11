@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TeamCollab.Data;
 using TeamCollab.Data.Enums;
@@ -23,7 +24,8 @@ namespace TeamCollab.Services.Implementations
                 UserId = userId,
                 ProjectId = projectId,
                 Content = content,
-                Type = type
+                Type = type,
+                Happened = DateTime.Now
             });
 
             await this.db.SaveChangesAsync();

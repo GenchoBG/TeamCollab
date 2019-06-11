@@ -16,6 +16,7 @@ namespace TeamCollab.Services.Interfaces
         Task MoveCardAsync(int cardId, int boardId, int? prevCardId, int? nextCardId, string userId);
         Task DeleteCardAsync(int cardId);
         Task ArchiveCardAsync(int cardId);
+        Task ArchiveBoardAsync(int boardId);
         Task<Card> GetCardAsync(int cardId);
         Task<IEnumerable<Card>> GetCardsAsync(int boardId);
     }

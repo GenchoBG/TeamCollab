@@ -28,7 +28,7 @@
                     <div class="col-10">
                         <header style="display: inline">@board.Name</header>
                     </div>
-                    <div class="col" id="x-@board.Id" onclick="deleteBoard(@board.Id)" style="font-size: 20pt;">&times;</div>
+                    <div class="col" id="x-@board.Id" onclick="archiveBoard(@board.Id)" style="font-size: 20pt;">&times;</div>
                 </div>
                 <div class="input-group mb-3">
                     <input id="cardName-@board.Id" type="text" class="form-control" placeholder="Add card" aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -165,10 +165,10 @@
                 }
             });
 
-        function deleteBoard(boardId) {
+        function archiveBoard(boardId) {
             $.ajax({
                 method: "GET",
-                url: `/Kanban/DeleteBoard?boardId=${boardId}`,
+                url: `/Kanban/ArchiveBoard?boardId=${boardId}`,
                 success: function() {
                     location.reload();
                 },

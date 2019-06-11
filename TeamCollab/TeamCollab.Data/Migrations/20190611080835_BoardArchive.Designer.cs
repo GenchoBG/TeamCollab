@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamCollab.Data;
 
 namespace TeamCollab.Data.Migrations
 {
     [DbContext(typeof(TeamCollabDbContext))]
-    partial class TeamCollabDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190611080835_BoardArchive")]
+    partial class BoardArchive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,8 +143,6 @@ namespace TeamCollab.Data.Migrations
 
                     b.Property<bool>("Archived");
 
-                    b.Property<DateTime>("ArchivedDate");
-
                     b.Property<string>("Name")
                         .IsRequired();
 
@@ -211,8 +211,6 @@ namespace TeamCollab.Data.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired();
-
-                    b.Property<DateTime>("Happened");
 
                     b.Property<int>("ProjectId");
 
