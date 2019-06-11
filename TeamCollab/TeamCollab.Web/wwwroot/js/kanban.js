@@ -154,3 +154,5 @@ $("#empty").on("click",
         $("#recyclebin").empty();
     });
 
+var height = $("ion-icon").css("height");
+$(".details").css("height", height);

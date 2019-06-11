@@ -30,7 +30,7 @@
                     <div class="col-10">
                         <header style="display: inline">@board.Name</header>
                     </div>
-                    <div class="col" id="x-@board.Id" onclick="archiveBoard(@board.Id)" style="font-size: 20pt;">&times;</div>
+                    <div class="col" id="x-@board.Id" onclick="archiveBoard(@board.Id)" style="font-size: 20pt; cursor: pointer;">&times;</div>
                 </div>
                 <div class="input-group mb-3">
                     <input id="cardName-@board.Id" type="text" class="form-control" placeholder="Add card" aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -42,7 +42,13 @@
                     @foreach (var card in board.Cards)
                     {
                         <div class="card" id="card-@card.Id">
-                            <span class="cardtitle">@card.Content</span>
+                            <div class="row">
+                                <div class="col">
+                                    @* <span class="cardtitle">@card.Content</span> *@
+                                    <a href="" style="float: right" class="details"><ion-icon name="add"></ion-icon></a>
+                                    <p>@card.Content</p>
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>

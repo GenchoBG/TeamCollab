@@ -1,4 +1,5 @@
-﻿@model IEnumerable<HistoryViewModel>
+﻿@using TeamCollab.Web.Infrastructure.Extensions
+@model IEnumerable<HistoryViewModel>
 @{
     ViewData["Title"] = "History";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,7 +16,7 @@
             <div class="toast-header">
                 <strong class="mr-auto"></strong>
                 <input hidden="true" value="@card.Type" />
-                <small class="text-muted">just now</small>
+                <small class="text-muted">@Html.FormatTime(new TimeSpan(DateTime.Now.Ticks - card.Happened.Ticks))</small>
             </div>
             <div class="toast-body" style="word-wrap: break-word;">@card.Content</div>
         </div>

@@ -15,5 +15,7 @@ namespace TeamCollab.Web.Models.HistoryViewModels
         public string Content { get; set; }
 
         public EventType Type { get; set; }
+
+        public DateTime Happened { get; set; }
     }
 }
