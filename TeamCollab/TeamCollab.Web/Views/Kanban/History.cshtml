@@ -5,16 +5,42 @@
 }
 
 <h1 class="display-3">History</h1>
+<hr/>
 
-<div class="masonry">
+<div class="masonry justify-content-center">
     @foreach (var card in Model.OrderByDescending(c => c.Id))
     {
-        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast show" id="toast-@card.Id" role="alert" 
+             aria-live="assertive" aria-atomic="true" style="margin-right: 3%; width: 30%;">
             <div class="toast-header">
-                <strong class="mr-auto">@card.Type</strong>
+                <strong class="mr-auto"></strong>
+                <input hidden="true" value="@card.Type" />
                 <small class="text-muted">just now</small>
             </div>
-            <div class="toast-body">@card.Content</div>
+            <div class="toast-body" style="word-wrap: break-word;">@card.Content</div>
         </div>
     }
 </div>
+
+@section Scripts
+    {
+    <script>
+        $(".toast").each(function () {
+            var current = $("#" + this.id);
+            var type = current.find("input").val();
+            switch (type) {
+                case "Success":
+                    current.addClass("border-success");
+                    current.find("strong").append(`<ion-icon name="create"></ion-icon>`);
+                    break;
+                case "Warning":
+                    current.addClass("border-warning");
+                    current.find("strong").append(`<ion-icon name="filing"></ion-icon>`);
+                    break;
+                case "Danger":
+                    current.addClass("border-danger");
+                    break;
+            }
+            });
+    </script>
+}
