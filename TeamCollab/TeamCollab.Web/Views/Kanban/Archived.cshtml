@@ -1,0 +1,21 @@
+﻿@model IEnumerable<ArchivedListViewModel>
+@{
+    ViewData["Title"] = "Archived";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="display-3">Archived</h1>
+<hr/>
+
+<div class="masonry">
+    @foreach (var card in Model.OrderByDescending(c => c.ArchivedDate))
+    {
+    <div class="card masonry-brick" id="card-@card.Id">
+        <div class="card-header">Board: <strong>@card.BoardName</strong></div>
+        <div class="card-body">
+            <p class="card-text">@card.Content</p>
+            <small class="mb-2 text-muted">Archived: @card.ArchivedDate</small>
+        </div>
+    </div>
+    }
+</div>

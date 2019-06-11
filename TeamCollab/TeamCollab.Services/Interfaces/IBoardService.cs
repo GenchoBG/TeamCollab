@@ -19,5 +19,6 @@ namespace TeamCollab.Services.Interfaces
         Task ArchiveBoardAsync(int boardId);
         Task<Card> GetCardAsync(int cardId);
         Task<IEnumerable<Card>> GetCardsAsync(int boardId);
+        IQueryable<Card> GetArchived(int projectId);
     }
 }
