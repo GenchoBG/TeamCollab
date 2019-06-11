@@ -8,7 +8,7 @@
 <div class="input-group mb-3">
     <input id="boardName" type="text" class="form-control" placeholder="Add board" aria-label="Recipient's username" aria-describedby="basic-addon2">
     <div class="input-group-append">
-        <button id="boardNameBtn" class="btn" onclick="addBoard()">Append</button>
+        <button id="boardNameBtn" class="btn btn-success" onclick="addBoard()">Append</button>
         <a class="btn btn-warning" href="/Kanban/Archived/@ViewData["projectId"]">Archived</a>
         <a class="btn btn-info" href="/Kanban/History/@ViewData["projectId"]">History</a>
     </div>
@@ -35,7 +35,7 @@
                 <div class="input-group mb-3">
                     <input id="cardName-@board.Id" type="text" class="form-control" placeholder="Add card" aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
-                        <button id="btn-@board.Id" class="btn" onclick="addCard(@board.Id)">Create</button>
+                        <button id="btn-@board.Id" class="btn btn-secondary" onclick="addCard(@board.Id)">Create</button>
                     </div>
                 </div>
                 <div class="cards">

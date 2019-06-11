@@ -6,19 +6,33 @@
 
 <h1>Card Details @if (Model.Archived)
 {<strong>[Archived]</strong>}</h1>
-<div>Board: @Model.BoardName</div>
+<h5>Board: <strong>@Model.BoardName</strong></h5>
 <div>Created: @Model.Created.ToString()</div>
 <div>Last Modified: @Model.LastModified.ToString() by @Model.LastModifiedBy</div>
 
-<textarea id="comment-content"></textarea>
-<button onClick="addComment(@Model.Id)">Comment</button>
+<hr/>
+@if (Model.Archived)
+{
+    <div class="form-group">
+        <textarea id="comment-content" class="form-control" placeholder="Add comment" rows="5" disabled></textarea>
+    </div>
+    <button onClick="addComment(@Model.Id)" class="btn btn-primary btn-lg btn-block" disabled>Comment</button>
+}
+else
+{
+    <div class="form-group">
+        <textarea id="comment-content" class="form-control" placeholder="Add comment" rows="5"></textarea>
+    </div>
+    <button onClick="addComment(@Model.Id)" class="btn btn-primary btn-lg btn-block">Comment</button>
+}
+<hr/>
 
 <ul class="list-group">
-    @foreach (var comment in @Model.Comments)
+    @foreach (var comment in @Model.Comments.OrderByDescending(c => c.Posted))
     {
         <li class="list-group-item">
-            <div>By: @comment.Sender (@Html.FormatTime(new TimeSpan(DateTime.Now.Ticks - comment.Posted.Ticks)))</div>
-            <div>@comment.Content</div>
+            <div>By <strong>@comment.Sender</strong> (@Html.FormatTime(new TimeSpan(DateTime.Now.Ticks - comment.Posted.Ticks))):</div>
+            <div><p>@comment.Content</p></div>
         </li>
     }
 </ul>
@@ -27,6 +41,9 @@
 @section Scripts{
     <script>
         function addComment(id) {
+            if (!$("#comment-content").val()) {
+                return;
+            }
             $.ajax({
                 method: "GET",
                 url: `/Kanban/AddComment?cardId=${id}&commentContent=${$("#comment-content").val()}`,
